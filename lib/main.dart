@@ -9,7 +9,7 @@ import 'Home/homepage.dart';
 import 'Intro/intropage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() async {
+void main() {
   runApp(MyApp());
 }
 
