@@ -82,7 +82,7 @@ class AccountFragmentState extends State<AccountFragment> {
                         flex: 3,
                         child: Text(
                           user!.displayName!,
-                          style: TextStyle(fontSize: 18.0),
+                          style: const TextStyle(fontSize: 18.0),
                         ),
                       )
                     ],
