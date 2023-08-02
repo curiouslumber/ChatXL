@@ -81,7 +81,9 @@ class AccountFragmentState extends State<AccountFragment> {
                       Expanded(
                         flex: 3,
                         child: Text(
-                          user!.displayName!,
+                          user?.displayName == null
+                              ? 'User'
+                              : user!.displayName!,
                           style: const TextStyle(fontSize: 18.0),
                         ),
                       )
@@ -93,104 +95,173 @@ class AccountFragmentState extends State<AccountFragment> {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 32.0),
                     color: Colors.white,
-                    child: Column(children: [
-                      const Spacer(
-                        flex: 1,
-                      ),
-                      Expanded(
-                          flex: 3,
-                          child: MaterialButton(
-                            onPressed: () {},
-                            minWidth: availableWidth,
-                            color: Colors.green,
-                            child: Text(
-                              'Sign In',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: fontSize * 0.9),
+                    child: user?.email == null
+                        ? Column(children: [
+                            const Spacer(
+                              flex: 1,
                             ),
-                          )),
-                      const Spacer(
-                        flex: 2,
-                      ),
-                      Expanded(
-                          flex: 3,
-                          child: MaterialButton(
-                            onPressed: () {},
-                            minWidth: availableWidth,
-                            color: Colors.green,
-                            child: Text(
-                              'Create an Account',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: fontSize * 0.9),
-                            ),
-                          )),
-                      const Spacer(
-                        flex: 2,
-                      ),
-                      Expanded(
-                          flex: 3,
-                          child: MaterialButton(
-                            onPressed: () async {
-                              void showMessage(String message) {
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: const Text("Error"),
-                                        content: Text(message),
-                                        actions: [
-                                          TextButton(
-                                            child: const Text("Ok"),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                          )
-                                        ],
-                                      );
-                                    });
-                              }
-
-                              setState(() {
-                                isLoading = true;
-                              });
-                              FirebaseService service = FirebaseService();
-                              try {
-                                await service.signInwithGoogle();
-                                Get.offAll(() => const HomePage());
-                              } catch (e) {
-                                if (e is FirebaseAuthException) {
-                                  showMessage(e.message!);
-                                }
-                              }
-                              setState(() {
-                                isLoading = false;
-                              });
-                            },
-                            color: Colors.green,
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Icon(
-                                  FontAwesomeIcons.google,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
-                                Container(
-                                  margin: const EdgeInsets.only(left: 16.0),
+                            Expanded(
+                                flex: 3,
+                                child: MaterialButton(
+                                  onPressed: () {},
+                                  minWidth: availableWidth,
+                                  color: Colors.green,
                                   child: Text(
-                                    'Sign In with Google',
+                                    'Sign In',
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontSize: fontSize * 0.9),
                                   ),
-                                ),
-                              ],
+                                )),
+                            const Spacer(
+                              flex: 2,
                             ),
-                          )),
-                    ]),
+                            Expanded(
+                                flex: 3,
+                                child: MaterialButton(
+                                  onPressed: () {},
+                                  minWidth: availableWidth,
+                                  color: Colors.green,
+                                  child: Text(
+                                    'Create an Account',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: fontSize * 0.9),
+                                  ),
+                                )),
+                            const Spacer(
+                              flex: 2,
+                            ),
+                            Expanded(
+                                flex: 3,
+                                child: MaterialButton(
+                                  onPressed: () async {
+                                    void showMessage(String message) {
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: const Text("Error"),
+                                              content: Text(message),
+                                              actions: [
+                                                TextButton(
+                                                  child: const Text("Ok"),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                )
+                                              ],
+                                            );
+                                          });
+                                    }
+
+                                    setState(() {
+                                      isLoading = true;
+                                    });
+                                    FirebaseService service = FirebaseService();
+                                    try {
+                                      await service.signInwithGoogle();
+                                      Get.offAll(() => const HomePage());
+                                    } catch (e) {
+                                      if (e is FirebaseAuthException) {
+                                        showMessage(e.message!);
+                                      }
+                                    }
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                  },
+                                  color: Colors.green,
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Icon(
+                                        FontAwesomeIcons.google,
+                                        color: Colors.white,
+                                        size: 20,
+                                      ),
+                                      Container(
+                                        margin:
+                                            const EdgeInsets.only(left: 16.0),
+                                        child: Text(
+                                          'Sign In with Google',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: fontSize * 0.9),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )),
+                          ])
+                        : Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const Spacer(flex: 3),
+                              Expanded(
+                                flex: 3,
+                                child: Text(
+                                  'Signed in as \n${user!.email!}',
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              const Spacer(
+                                flex: 2,
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: MaterialButton(
+                                  onPressed: () async {
+                                    void showMessage(String message) {
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: const Text("Error"),
+                                              content: Text(message),
+                                              actions: [
+                                                TextButton(
+                                                  child: const Text("Ok"),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                )
+                                              ],
+                                            );
+                                          });
+                                    }
+
+                                    setState(() {
+                                      isLoading = true;
+                                    });
+                                    FirebaseService service = FirebaseService();
+                                    try {
+                                      await service.signOutFromGoogle();
+                                      Get.offAll(() => const HomePage());
+                                    } catch (e) {
+                                      if (e is FirebaseAuthException) {
+                                        showMessage(e.message!);
+                                      }
+                                    }
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                  },
+                                  color: Colors.green,
+                                  child: const Text(
+                                    'Sign out',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                              const Spacer(
+                                flex: 1,
+                              )
+                            ],
+                          ),
                   ),
                 ),
                 const Spacer(
