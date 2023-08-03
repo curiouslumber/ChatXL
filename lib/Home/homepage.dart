@@ -1,7 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:chatdb/Home/account.dart';
 import 'package:chatdb/Home/home.dart';
-import 'package:chatdb/Home/sidebar.dart';
+import 'package:chatdb/Elements/sidebar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';

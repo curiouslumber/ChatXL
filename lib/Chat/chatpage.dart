@@ -1,3 +1,4 @@
+import 'package:chatdb/Elements/checkinternet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_glow/flutter_glow.dart';
 import 'package:get/get.dart';
@@ -5,6 +6,7 @@ import 'controller.dart';
 
 class ChatPage extends StatelessWidget {
   final Controller c = Get.put(Controller());
+  final CheckInternet p = Get.put(CheckInternet());
   ChatPage({super.key});
 
   @override
@@ -23,6 +25,8 @@ class ChatPage extends StatelessWidget {
     var horizontalpadding = mediaQueryData.size.width * paddingFactor;
     // ignore: unused_local_variable
     var verticalPadding = mediaQueryData.size.height * paddingFactor;
+
+    p.checkUserConnection();
 
     final TextEditingController textEditingController = TextEditingController();
     return Container(
@@ -65,34 +69,41 @@ class ChatPage extends StatelessWidget {
                           )),
                     ),
                     Expanded(
-                      flex: 1,
+                      flex: 2,
                       child: Container(
-                          height: availableHeight * 0.08,
-                          margin: EdgeInsets.only(right: horizontalpadding),
-                          padding: EdgeInsets.only(top: verticalPadding * 0.3),
-                          alignment: Alignment.centerRight,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
+                        height: availableHeight * 0.08,
+                        margin: EdgeInsets.only(right: horizontalpadding),
+                        alignment: Alignment.centerRight,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Obx(
+                              () => Container(
                                   margin: EdgeInsets.only(
-                                      right: horizontalpadding * 0.5),
-                                  child: const Text(
-                                    'Connected',
-                                    style: TextStyle(
+                                      right: horizontalpadding * 0.5,
+                                      top: verticalPadding * 0.03),
+                                  child: Text(
+                                    p.activeConnection.value
+                                        ? 'Connected'
+                                        : 'Not Connected',
+                                    style: const TextStyle(
                                         fontWeight: FontWeight.w600,
                                         color: Color.fromARGB(255, 9, 101, 64)),
                                   )),
-                              GlowRadio(
-                                value: true,
+                            ),
+                            Obx(
+                              () => GlowRadio(
+                                value: p.activeConnection.value ? true : false,
                                 groupValue: true,
                                 onChange: (value) {},
                                 color: Colors.green,
                                 glowColor: Colors.greenAccent,
                               ),
-                            ],
-                          )),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -163,7 +174,9 @@ class ChatPage extends StatelessWidget {
                             decoration: InputDecoration(
                               hintText: c.userMessage.value
                                   ? 'Enter your message...'
-                                  : 'Please wait...',
+                                  : (p.activeConnection.value
+                                      ? 'Please wait...'
+                                      : 'Not Connected'),
                               enabledBorder: const OutlineInputBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(8.0)),
@@ -194,18 +207,13 @@ class ChatPage extends StatelessWidget {
                     ),
                     Expanded(
                       flex: 2,
-                      child: Container(
-                        margin: const EdgeInsets.only(
-                            bottom: 8.0, top: 8.0, left: 8.0),
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 147, 222, 138),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        child: IconButton(
-                          alignment: Alignment.center,
-                          iconSize: 25,
-                          onPressed: () {
+                      child: MaterialButton(
+                        onPressed: () async {
+                          await p.checkUserConnection();
+                          if (p.activeConnection.value) {
+                            if (c.userMessage.value == false) {
+                              c.userMessage.value = true;
+                            }
                             String message = textEditingController.text;
                             if (message.isNotEmpty) {
                               c.userMessagesObx.add(message);
@@ -221,8 +229,15 @@ class ChatPage extends StatelessWidget {
                               c.processUsertoAI(message);
                               c.aioruser.add("user");
                             }
-                          },
-                          icon: const Icon(Icons.send),
+                          } else {
+                            c.userMessage.value = false;
+                          }
+                        },
+                        height: availableHeight / 10,
+                        color: Colors.green,
+                        child: const Icon(
+                          Icons.send,
+                          color: Colors.white,
                         ),
                       ),
                     )
