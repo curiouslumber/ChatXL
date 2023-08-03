@@ -15,5 +15,5 @@ A flutter AI application where I encoporate the concept of neural network and na
 - Awesome Icons and Glowing buttons
 
 ## Copyright Notice
-Even though I have published this on Github for public use, please feel free to mention my name if forking this project. Thanks!
-Forking Notice - This won't run out of the box, please create your own Firebase project and add the respective google-services.json and firebase_options.dart file.
+Even though I have published this on Github for public use, please feel free to mention my name if forking this project. Thanks! <br>
+<i>Forking Notice - This won't run out of the box, please create your own Firebase project and add the respective google-services.json and firebase_options.dart file.</i>
