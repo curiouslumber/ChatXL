@@ -1,4 +1,5 @@
 import 'package:chatdb/Elements/checkinternet.dart';
+import 'package:chatdb/SQLite/sqlite_test.dart';
 import 'package:chatdb/Home/homepage.dart';
 import 'package:chatdb/Elements/firebaseservice.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -117,7 +118,9 @@ class AccountFragmentState extends State<AccountFragment> {
                                     Expanded(
                                         flex: 3,
                                         child: MaterialButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            Get.to(() => const SQLiteTest());
+                                          },
                                           minWidth: availableWidth,
                                           color: Colors.green,
                                           child: Text(
