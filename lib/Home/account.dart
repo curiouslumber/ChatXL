@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-
+import 'package:flutter/foundation.dart' show kIsWeb;
 import '../Account/register.dart';
 
 class AccountFragment extends StatefulWidget {
@@ -18,8 +18,6 @@ class AccountFragment extends StatefulWidget {
 class AccountFragmentState extends State<AccountFragment> {
   bool isLoading = false;
   User? user = FirebaseAuth.instance.currentUser;
-
-  final CheckInternet c = Get.put(CheckInternet());
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +35,12 @@ class AccountFragmentState extends State<AccountFragment> {
     // ignore: unused_local_variable
     var verticalPadding = mediaQueryData.size.height * paddingFactor;
 
-    c.checkUserConnection();
+    final CheckInternet c = Get.put(CheckInternet());
+    if (kIsWeb) {
+      c.activeConnection.value = true;
+    } else {
+      c.checkUserConnection();
+    }
 
     return !isLoading
         ? Container(

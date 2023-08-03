@@ -20,6 +20,10 @@
             "package_name": "com.example.chatdb",
             "certificate_hash": "2292e8c2ae8e8d59ce026c6af1018a0fa04c060a"
           }
+        },
+        {
+          "client_id": "268057645035-2iev5jkqvdpata72tej936rdmrlci5mb.apps.googleusercontent.com",
+          "client_type": 3
         }
       ],
       "api_key": [
@@ -29,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "268057645035-2iev5jkqvdpata72tej936rdmrlci5mb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
