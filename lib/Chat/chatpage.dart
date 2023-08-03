@@ -233,7 +233,7 @@ class ChatPage extends StatelessWidget {
                             c.userMessage.value = false;
                           }
                         },
-                        height: availableHeight / 10,
+                        height: 60,
                         color: Colors.green,
                         child: const Icon(
                           Icons.send,
