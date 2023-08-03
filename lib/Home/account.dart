@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
+import '../Account/register.dart';
+
 class AccountFragment extends StatefulWidget {
   const AccountFragment({super.key});
 
@@ -19,6 +21,7 @@ class AccountFragmentState extends State<AccountFragment> {
 
   final CheckInternet c = Get.put(CheckInternet());
 
+  @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQueryData = MediaQuery.of(context);
     // ignore: unused_local_variable
@@ -35,12 +38,6 @@ class AccountFragmentState extends State<AccountFragment> {
     var verticalPadding = mediaQueryData.size.height * paddingFactor;
 
     c.checkUserConnection();
-
-    if (c.activeConnection.value) {
-      print("Internet conencted");
-    } else {
-      print("No internet");
-    }
 
     return !isLoading
         ? Container(
@@ -133,7 +130,9 @@ class AccountFragmentState extends State<AccountFragment> {
                                     Expanded(
                                         flex: 3,
                                         child: MaterialButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            Get.to(() => const RegisterPage());
+                                          },
                                           minWidth: availableWidth,
                                           color: Colors.green,
                                           child: Text(
