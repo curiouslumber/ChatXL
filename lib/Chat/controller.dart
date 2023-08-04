@@ -8,7 +8,8 @@ class Controller extends GetxController {
   var userMessagesObx = [""].obs;
   RxList<int> userMessageIndexesObx = [1].obs;
   RxList<String> aioruser = [""].obs;
-
+  var fileImported = false.obs;
+  var filePath = "".obs;
   var aiMessage = false.obs;
   var userMessage = true.obs;
 

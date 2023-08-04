@@ -22,6 +22,8 @@ dependencies:
   google_sign_in: ^6.1.4
   sqflite: ^2.3.0
   path: ^1.8.3
+  excel: ^2.1.0
+  file_picker: ^5.3.3
   
 dev_dependencies:
   flutter_test:

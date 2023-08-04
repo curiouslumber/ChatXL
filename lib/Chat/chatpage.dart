@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:chatdb/Elements/checkinternet.dart';
+import 'package:excel/excel.dart' as prefix;
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_glow/flutter_glow.dart';
 import 'package:get/get.dart';
@@ -11,6 +15,37 @@ class ChatPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Future<void> readExcelData(String filePath) async {
+      var file = File(filePath);
+      var bytes = await file.readAsBytes();
+      var excel = prefix.Excel.decodeBytes(bytes);
+
+      var sheet = excel.tables.keys.first;
+    }
+
+    Future<void> pickFile(BuildContext context) async {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['xlsx'],
+      );
+
+      if (result != null) {
+        String filePath = result.files.single.path!;
+        readExcelData(filePath);
+        c.fileImported.value = true;
+        c.filePath.value = result.files.single.name;
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Excel File Imported"),
+        ));
+      } else {
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("No file selected"),
+        ));
+      }
+    }
+
     // Responsive data
     MediaQueryData mediaQueryData = MediaQuery.of(context);
     // ignore: unused_local_variable
@@ -109,48 +144,81 @@ class ChatPage extends StatelessWidget {
                 ),
                 Expanded(
                   flex: 1,
-                  child: Obx(
-                    () => Container(
-                      margin: EdgeInsets.only(
-                          left: horizontalpadding,
-                          right: horizontalpadding,
-                          bottom: horizontalpadding * 0.4),
-                      alignment: Alignment.topCenter,
-                      child: ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          itemCount: c.messageCount.value,
-                          itemBuilder: (context, index) {
-                            if (index == 0) {
-                              if (!c.aioruser.contains("ai")) {
-                                c.aioruser.add("ai");
-                              }
-                              return AIMessageWidget(c.aiMessages.elementAt(0));
-                            } else if (index != 0 &&
-                                index != 1 &&
-                                c.aioruser.elementAt(index - 1) == "ai") {
-                              return AIMessageWidget(c.aiMessages.elementAt(0));
-                            } else if (index != 0 &&
-                                index != 1 &&
-                                c.aioruser.elementAt(index - 1) == "user") {
-                              if (c.userMessageIndexesObx.contains(index)) {
-                                return SenderMessageWidget(c.userMessagesObx
-                                    .elementAt(c.userMessageIndexesObx
-                                        .indexOf(index)));
-                              }
-                            } else {
-                              if (!c.aioruser.contains("user")) {
-                                c.aioruser.add("user");
-                              }
+                  child: Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: [
+                      Obx(
+                        () => Container(
+                          margin: EdgeInsets.only(
+                              left: horizontalpadding,
+                              right: horizontalpadding,
+                              bottom: horizontalpadding * 0.4),
+                          alignment: Alignment.topCenter,
+                          child: ListView.builder(
+                              scrollDirection: Axis.vertical,
+                              itemCount: c.messageCount.value,
+                              itemBuilder: (context, index) {
+                                if (index == 0) {
+                                  if (!c.aioruser.contains("ai")) {
+                                    c.aioruser.add("ai");
+                                  }
+                                  return AIMessageWidget(
+                                      c.aiMessages.elementAt(0));
+                                } else if (index != 0 &&
+                                    index != 1 &&
+                                    c.aioruser.elementAt(index - 1) == "ai") {
+                                  return AIMessageWidget(
+                                      c.aiMessages.elementAt(0));
+                                } else if (index != 0 &&
+                                    index != 1 &&
+                                    c.aioruser.elementAt(index - 1) == "user") {
+                                  if (c.userMessageIndexesObx.contains(index)) {
+                                    return SenderMessageWidget(c.userMessagesObx
+                                        .elementAt(c.userMessageIndexesObx
+                                            .indexOf(index)));
+                                  }
+                                } else {
+                                  if (!c.aioruser.contains("user")) {
+                                    c.aioruser.add("user");
+                                  }
 
-                              if (c.userMessageIndexesObx.contains(index)) {
-                                return SenderMessageWidget(c.userMessagesObx
-                                    .elementAt(c.userMessageIndexesObx
-                                        .indexOf(index)));
-                              }
-                            }
-                            return null;
-                          }),
-                    ),
+                                  if (c.userMessageIndexesObx.contains(index)) {
+                                    return SenderMessageWidget(c.userMessagesObx
+                                        .elementAt(c.userMessageIndexesObx
+                                            .indexOf(index)));
+                                  }
+                                }
+                                return null;
+                              }),
+                        ),
+                      ),
+                      Obx(
+                        () => !c.fileImported.value
+                            ? Container(
+                                height: availableHeight / 10,
+                                margin: const EdgeInsets.only(bottom: 8.0),
+                                alignment: Alignment.center,
+                                decoration: const BoxDecoration(
+                                    border: Border.symmetric(
+                                        horizontal:
+                                            BorderSide(color: Colors.green))),
+                                child: MaterialButton(
+                                  onPressed: () {
+                                    pickFile(context);
+                                  },
+                                  color: Colors.green,
+                                  child: const Text(
+                                    'Import Excel File',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              )
+                            : Container(
+                                alignment: Alignment.bottomCenter,
+                                child: Text('Using file : ${c.filePath.value}'),
+                              ),
+                      ),
+                    ],
                   ),
                 ),
                 Container(
