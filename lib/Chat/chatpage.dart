@@ -20,6 +20,7 @@ class ChatPage extends StatelessWidget {
       var bytes = await file.readAsBytes();
       var excel = prefix.Excel.decodeBytes(bytes);
 
+      // ignore: unused_local_variable
       var sheet = excel.tables.keys.first;
     }
 

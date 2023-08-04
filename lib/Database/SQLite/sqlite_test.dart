@@ -1,4 +1,4 @@
-import 'package:chatdb/SQLite/databasehelper.dart';
+import 'package:chatdb/Database/SQLite/databasehelper.dart';
 import 'package:flutter/material.dart';
 
 class SQLiteTest extends StatefulWidget {

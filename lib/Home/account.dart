@@ -1,5 +1,5 @@
 import 'package:chatdb/Elements/checkinternet.dart';
-import 'package:chatdb/SQLite/sqlite_test.dart';
+import 'package:chatdb/Database/SQLite/sqlite_test.dart';
 import 'package:chatdb/Home/homepage.dart';
 import 'package:chatdb/Elements/firebaseservice.dart';
 import 'package:firebase_auth/firebase_auth.dart';
