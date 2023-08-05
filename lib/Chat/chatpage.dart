@@ -1,5 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
-
+import 'package:http/http.dart' as http;
 import 'package:chatdb/Elements/checkinternet.dart';
 import 'package:excel/excel.dart' as prefix;
 import 'package:file_picker/file_picker.dart';
@@ -8,10 +9,16 @@ import 'package:flutter_glow/flutter_glow.dart';
 import 'package:get/get.dart';
 import 'controller.dart';
 
-class ChatPage extends StatelessWidget {
+class ChatPage extends StatefulWidget {
+  const ChatPage({super.key});
+
+  @override
+  ChatPageState createState() => ChatPageState();
+}
+
+class ChatPageState extends State<ChatPage> {
   final Controller c = Get.put(Controller());
   final CheckInternet p = Get.put(CheckInternet());
-  ChatPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -297,6 +304,8 @@ class ChatPage extends StatelessWidget {
                               c.userMessage.value = false;
                               c.processUsertoAI(message);
                               c.aioruser.add("user");
+
+                              fetchData();
                             }
                           } else {
                             c.userMessage.value = false;
@@ -318,6 +327,26 @@ class ChatPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> fetchData() async {
+    final url = Uri.parse('http://192.168.1.34:8000/api/v1/');
+
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        // API call successful, parse the response
+        final responseData = jsonDecode(response.body);
+        // Update the state with the fetched data
+        print(responseData);
+      } else {
+        // API call failed
+        print('Error: ${response.statusCode}');
+      }
+    } catch (error) {
+      // Handle any errors that occurred during the API call
+      print('Error: $error');
+    }
   }
 }
 
