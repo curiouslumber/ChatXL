@@ -1,3 +1,4 @@
+import 'package:chatdb/Home/homepage2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../Chat/chatpage.dart';
@@ -183,7 +184,7 @@ class HomeFragmentState extends State<HomeFragment> {
               child: MaterialButton(
                 minWidth: availableWidth / 1.1,
                 onPressed: () {
-                  Get.to(() => ChatPage());
+                  Get.to(() => const ChatPage());
                 },
                 color: Colors.white,
                 child: const Text(
@@ -200,7 +201,9 @@ class HomeFragmentState extends State<HomeFragment> {
               flex: 2,
               child: MaterialButton(
                 minWidth: availableWidth / 1.1,
-                onPressed: () {},
+                onPressed: () {
+                  Get.to(() => const HomePage2());
+                },
                 color: Colors.white,
                 child: const Text(
                   'View My Databases',
