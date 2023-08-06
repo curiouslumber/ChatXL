@@ -1,8 +1,9 @@
+import 'package:chatdb/Home/homepage2.dart';
 import 'package:chatdb/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'Home/homepage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +19,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const GetMaterialApp(home: HomePage());
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        systemNavigationBarColor:
+            Color.fromARGB(255, 195, 204, 202), // Set your desired color here
+      ),
+    );
+    return const GetMaterialApp(home: HomePage2());
   }
 }

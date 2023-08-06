@@ -51,6 +51,7 @@ class SQLiteTestState extends State<SQLiteTest> {
   Future<void> _readContacts() async {
     List<Contact> contacts = await dbHelper.getContacts();
     for (var contact in contacts) {
+      // ignore: avoid_print
       print('Contact: ${contact.name}, Phone: ${contact.phone}');
     }
   }

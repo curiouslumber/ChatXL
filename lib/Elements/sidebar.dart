@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../Home/homepage.dart';
 
 class Sidebar extends StatelessWidget {
   const Sidebar({
@@ -13,7 +16,7 @@ class Sidebar extends StatelessWidget {
         children: [
           const DrawerHeader(
             decoration: BoxDecoration(
-              color: Colors.green,
+              color: Color(0xff405C5A),
             ),
             child: Text(''),
           ),
@@ -38,6 +41,19 @@ class Sidebar extends StatelessWidget {
               style: TextStyle(color: Color.fromARGB(255, 109, 109, 109)),
             ),
             onTap: () {},
+          ),
+          ListTile(
+            horizontalTitleGap: 4.0,
+            leading: const Icon(
+              Icons.design_services,
+            ),
+            title: const Text(
+              'To other design',
+              style: TextStyle(color: Color.fromARGB(255, 109, 109, 109)),
+            ),
+            onTap: () {
+              Get.to(() => const HomePage());
+            },
           ),
           ListTile(
             horizontalTitleGap: 4.0,
