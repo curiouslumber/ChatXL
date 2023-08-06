@@ -9,9 +9,11 @@ A flutter AI application where I encoporate the concept of neural network and na
 ## Technologies Used
 - Flutter and Dart
 - Django Rest Framework for making API calls and storage using python
+- Postman for Testing
 - SQLite Database Localization for on device storage
-- Firebase Authentication (Googe Sign In)
+- Firebase Authentication (Googe Sign In & Anonymous Sign In)
 - GetX State Management
+- Working with User Files
 - Awesome Icons and Glowing buttons
 
 ## Copyright Notice
