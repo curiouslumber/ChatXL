@@ -1,3 +1,4 @@
+import 'package:chatdb/Chat/chat.dart';
 import 'package:chatdb/Elements/sidebar.dart';
 import 'package:chatdb/Home/home.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ class HomePage2 extends StatefulWidget {
 
 class HomePage2State extends State<HomePage2> {
   int _selectedIndex = 1;
+  var fragments = [ChatFragment(), const HomeFragment()];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -48,7 +50,7 @@ class HomePage2State extends State<HomePage2> {
         Expanded(
           flex: 4,
           child: Container(
-              color: const Color(0xff405C5A), child: const HomeFragment()),
+              color: const Color(0xff405C5A), child: fragments[_selectedIndex]),
         ),
         Container(
           color: const Color(0xff405C5A),
