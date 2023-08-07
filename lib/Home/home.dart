@@ -34,6 +34,7 @@ class HomeFragmentState extends State<HomeFragment> {
           child: Container(
             alignment: Alignment.topLeft,
             padding: const EdgeInsets.only(left: 32.0, right: 24.0),
+            margin: const EdgeInsets.only(top: 16.0),
             child: const Row(
               children: [
                 Expanded(
@@ -41,7 +42,7 @@ class HomeFragmentState extends State<HomeFragment> {
                     child: Text(
                       'Good Morning\nNoel,',
                       style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 22,
                           fontFamily: 'Ubuntu',
                           color: Color(0xffFFCFA3)),
                     )),
@@ -57,17 +58,19 @@ class HomeFragmentState extends State<HomeFragment> {
           ),
         ),
         Expanded(
-            flex: 7,
-            child: Container(
-                margin: const EdgeInsets.only(left: 32.0),
-                alignment: Alignment.topLeft,
-                child: const Text(
-                  'Connect\nExcel\nwith AI',
-                  style: TextStyle(
-                      fontFamily: 'DaysOne',
-                      color: Color(0xffFFCFA3),
-                      fontSize: 28),
-                ))),
+          flex: 7,
+          child: Container(
+            margin: const EdgeInsets.only(left: 32.0),
+            alignment: Alignment.topLeft,
+            child: const Text(
+              'Connect\nExcel\nwith AI',
+              style: TextStyle(
+                  fontFamily: 'DaysOne',
+                  color: Color(0xffFFCFA3),
+                  fontSize: 34),
+            ),
+          ),
+        ),
         Expanded(
           flex: 7,
           child: Container(
