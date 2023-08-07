@@ -1,4 +1,5 @@
 import 'package:chatdb/Elements/sidebar.dart';
+import 'package:chatdb/Home/home.dart';
 import 'package:flutter/material.dart';
 
 class HomePage2 extends StatefulWidget {
@@ -28,6 +29,7 @@ class HomePage2State extends State<HomePage2> {
           'ChatDB',
           style: TextStyle(
             fontFamily: 'Ubuntu',
+            fontSize: 20,
             color: Color(0xffFFCFA3),
           ),
           textAlign: TextAlign.center,
@@ -45,7 +47,8 @@ class HomePage2State extends State<HomePage2> {
       body: Column(children: [
         Expanded(
           flex: 4,
-          child: Container(color: const Color(0xff405C5A)),
+          child:
+              Container(child: HomeFragment(), color: const Color(0xff405C5A)),
         ),
         Container(
           color: const Color(0xff405C5A),
