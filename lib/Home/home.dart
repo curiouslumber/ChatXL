@@ -34,9 +34,9 @@ class HomeFragmentState extends State<HomeFragment> {
           child: Container(
             alignment: Alignment.topLeft,
             padding: const EdgeInsets.only(left: 32.0, right: 24.0),
-            child: Row(
+            child: const Row(
               children: [
-                const Expanded(
+                Expanded(
                     flex: 4,
                     child: Text(
                       'Good Morning\nNoel,',
@@ -47,11 +47,9 @@ class HomeFragmentState extends State<HomeFragment> {
                     )),
                 Expanded(
                   flex: 2,
-                  child: Container(
-                    child: const CircleAvatar(
-                      radius: 34.0,
-                      backgroundColor: Colors.white,
-                    ),
+                  child: CircleAvatar(
+                    radius: 34.0,
+                    backgroundColor: Colors.white,
                   ),
                 ),
               ],

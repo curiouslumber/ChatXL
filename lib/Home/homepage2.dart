@@ -47,8 +47,8 @@ class HomePage2State extends State<HomePage2> {
       body: Column(children: [
         Expanded(
           flex: 4,
-          child:
-              Container(child: HomeFragment(), color: const Color(0xff405C5A)),
+          child: Container(
+              color: const Color(0xff405C5A), child: const HomeFragment()),
         ),
         Container(
           color: const Color(0xff405C5A),
