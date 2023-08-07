@@ -1,7 +1,4 @@
-import 'package:chatdb/Home/homepage2.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import '../Chat/chatpage.dart';
 
 class HomeFragment extends StatefulWidget {
   const HomeFragment({super.key});
@@ -28,194 +25,185 @@ class HomeFragmentState extends State<HomeFragment> {
     // ignore: unused_local_variable
     var verticalPadding = mediaQueryData.size.height * paddingFactor;
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(colors: [
-          Color.fromARGB(255, 28, 180, 63),
-          Color.fromARGB(255, 58, 174, 95),
-          Color.fromARGB(255, 28, 180, 67)
-        ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
-      ),
-      child: Column(children: [
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
         Expanded(
-          flex: 2,
+          flex: 4,
           child: Container(
-            alignment: Alignment.center,
-            child: const Text(
-              'Welcome!',
-              style: TextStyle(color: Colors.white, fontSize: 28),
+            alignment: Alignment.topLeft,
+            padding: const EdgeInsets.only(left: 32.0, right: 24.0),
+            child: Row(
+              children: [
+                const Expanded(
+                    flex: 4,
+                    child: Text(
+                      'Good Morning\nNoel,',
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontFamily: 'Ubuntu',
+                          color: Color(0xffFFCFA3)),
+                    )),
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    child: const CircleAvatar(
+                      radius: 34.0,
+                      backgroundColor: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
+        Expanded(
+            flex: 7,
+            child: Container(
+                margin: const EdgeInsets.only(left: 32.0),
+                alignment: Alignment.topLeft,
+                child: const Text(
+                  'Connect\nExcel\nwith AI',
+                  style: TextStyle(
+                      fontFamily: 'DaysOne',
+                      color: Color(0xffFFCFA3),
+                      fontSize: 28),
+                ))),
         Expanded(
           flex: 7,
           child: Container(
-            margin: EdgeInsets.only(
-                left: horizontalpadding / 3,
-                right: horizontalpadding / 3,
-                bottom: verticalPadding / 3),
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(8.0)),
-            child: Column(children: [
-              Expanded(
-                flex: 3,
-                child: Container(
-                  padding: const EdgeInsets.only(top: 16.0),
-                  child: Row(children: [
-                    Expanded(
-                      flex: 1,
-                      child: Column(
-                        children: [
-                          Expanded(
-                            flex: 5,
-                            child: Container(
-                              alignment: Alignment.center,
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  const Text(
-                                    '3/10',
-                                    style: TextStyle(
-                                        fontSize: 20, color: Colors.grey),
-                                  ),
-                                  Transform.scale(
-                                    scale: availableHeight / 235,
-                                    child: Transform.rotate(
-                                      angle: -1.55,
-                                      child: CircularProgressIndicator(
-                                        value: 0.3,
-                                        strokeWidth: 4,
-                                        backgroundColor: Colors.grey[300],
-                                        valueColor:
-                                            const AlwaysStoppedAnimation<Color>(
-                                                Colors.blue),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          const Expanded(
-                            flex: 1,
-                            child: Text(
-                              'Databases',
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  color: Color.fromARGB(255, 9, 101, 64)),
-                            ),
-                          )
-                        ],
-                      ),
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            margin: const EdgeInsets.only(bottom: 8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                  color: const Color(0xff034B40),
+                  borderRadius: BorderRadius.circular(16.0)),
+              child: Column(children: [
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 16.0, top: 8.0),
+                    alignment: Alignment.topLeft,
+                    child: const Text(
+                      'Dashboard',
+                      style: TextStyle(
+                          color: Color(0xffFFCFA3), fontFamily: 'Ubuntu'),
                     ),
-                    Expanded(
-                      flex: 1,
-                      child: Column(
-                        children: [
-                          Expanded(
-                            flex: 5,
-                            child: Container(
-                              alignment: Alignment.center,
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  const Text(
-                                    '54/100',
-                                    style: TextStyle(
-                                        fontSize: 20, color: Colors.grey),
-                                  ),
-                                  Transform.scale(
-                                    scale: availableHeight / 235,
-                                    child: Transform.rotate(
-                                      angle: -1.55,
-                                      child: CircularProgressIndicator(
-                                        value: 0.54,
-                                        strokeWidth: 4,
-                                        backgroundColor: Colors.grey[300],
-                                        valueColor:
-                                            const AlwaysStoppedAnimation<Color>(
-                                                Colors.blue),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          const Expanded(
-                            flex: 1,
-                            child: Text(
-                              'Tables',
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  color: Color.fromARGB(255, 9, 101, 64)),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ]),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Container(
-                  padding: const EdgeInsets.only(bottom: 16.0, left: 16.0),
-                  alignment: Alignment.bottomLeft,
-                  child: const Text(
-                    'No. of query performed :',
-                    style: TextStyle(
-                        fontSize: 18, color: Color.fromARGB(255, 9, 101, 64)),
                   ),
                 ),
-              )
-            ]),
+                Expanded(
+                  flex: 4,
+                  child: Container(
+                    alignment: Alignment.topCenter,
+                    padding: const EdgeInsets.only(bottom: 14.0),
+                    child: Row(children: [
+                      Expanded(
+                        flex: 1,
+                        child: Column(
+                          children: [
+                            Expanded(
+                              flex: 5,
+                              child: Container(
+                                alignment: Alignment.center,
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    const Text(
+                                      '3/10',
+                                      style: TextStyle(
+                                          fontSize: 14, color: Colors.white),
+                                    ),
+                                    Transform.scale(
+                                      scale: availableHeight / 320,
+                                      child: Transform.rotate(
+                                        angle: -1.55,
+                                        child: const CircularProgressIndicator(
+                                          value: 0.3,
+                                          strokeWidth: 3,
+                                          backgroundColor: Colors.white,
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                                  Color.fromARGB(
+                                                      255, 189, 147, 107)),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const Expanded(
+                              flex: 1,
+                              child: Text(
+                                'Sheets',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    fontFamily: 'Ubuntu',
+                                    color: Color(0xffFFCFA3)),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Column(
+                          children: [
+                            Expanded(
+                              flex: 5,
+                              child: Container(
+                                alignment: Alignment.center,
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    const Text(
+                                      '54/100',
+                                      style: TextStyle(
+                                          fontSize: 14, color: Colors.white),
+                                    ),
+                                    Transform.scale(
+                                      scale: availableHeight / 320,
+                                      child: Transform.rotate(
+                                        angle: -1.55,
+                                        child: const CircularProgressIndicator(
+                                          value: 0.54,
+                                          strokeWidth: 3,
+                                          backgroundColor: Colors.white,
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                                  Color.fromARGB(
+                                                      255, 189, 147, 107)),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const Expanded(
+                              flex: 1,
+                              child: Text(
+                                'Tasks',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontFamily: 'Ubuntu',
+                                    fontSize: 14,
+                                    color: Color(0xffFFCFA3)),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ]),
+                  ),
+                ),
+              ]),
+            ),
           ),
-        ),
-        Expanded(
-          flex: 6,
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            const Spacer(
-              flex: 1,
-            ),
-            Expanded(
-              flex: 2,
-              child: MaterialButton(
-                minWidth: availableWidth / 1.1,
-                onPressed: () {
-                  Get.to(() => const ChatPage());
-                },
-                color: Colors.white,
-                child: const Text(
-                  'Start Chat',
-                  style: TextStyle(
-                      fontSize: 20, color: Color.fromARGB(255, 9, 101, 64)),
-                ),
-              ),
-            ),
-            const Spacer(
-              flex: 1,
-            ),
-            Expanded(
-              flex: 2,
-              child: MaterialButton(
-                minWidth: availableWidth / 1.1,
-                onPressed: () {
-                  Get.to(() => const HomePage2());
-                },
-                color: Colors.white,
-                child: const Text(
-                  'View My Databases',
-                  style: TextStyle(
-                      fontSize: 20, color: Color.fromARGB(255, 9, 101, 64)),
-                ),
-              ),
-            ),
-            const Spacer(flex: 1)
-          ]),
         )
-      ]),
+      ],
     );
   }
 }
