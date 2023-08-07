@@ -49,5 +49,8 @@ flutter:
     - family: Ubuntu
       fonts:
         - asset: fonts/Ubuntu-Medium.ttf
+    - family: DaysOne
+      fonts:
+        - asset: fonts/DaysOne-Regular.ttf
 
 
