@@ -1,6 +1,7 @@
 import 'package:chatdb/Chat/chat.dart';
 import 'package:chatdb/Elements/sidebar.dart';
 import 'package:chatdb/Home/home.dart';
+import 'package:chatdb/Sheets/sheets.dart';
 import 'package:flutter/material.dart';
 
 class HomePage2 extends StatefulWidget {
@@ -12,7 +13,11 @@ class HomePage2 extends StatefulWidget {
 
 class HomePage2State extends State<HomePage2> {
   int _selectedIndex = 1;
-  var fragments = [ChatFragment(), const HomeFragment()];
+  var fragments = [
+    ChatFragment(),
+    const HomeFragment(),
+    const SheetsFragment()
+  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -97,7 +102,7 @@ class CurvedBottomNavigationBarContainer extends StatelessWidget {
               offset: const Offset(0, 16), // Adjust the margin as needed
               child: BottomNavItem(
                 icon: Icons.chat,
-                label: ' Chats ',
+                label: ' Chat ',
                 isSelected: selectedIndex == 0,
                 onTap: () => onTabChanged(0),
               ),
