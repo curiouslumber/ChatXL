@@ -4,7 +4,8 @@
 
 A flutter AI application where I encoporate the concept of neural network and natural language processing to perform operations on databases and tables using english text.
 
-<!-- <img src="https://github.com/curiouslumber/ChatDB/blob/main/images/pages/page1.png" width="200" hspace="30"><img src="https://github.com/curiouslumber/ChatDB/blob/main/images/pages/page2.png" width="200" hspace="30" > <img src="https://github.com/curiouslumber/ChatDB/blob/main/images/pages/page3.png" width="200" hspace="30"> -->
+<img src="https://github.com/curiouslumber/ChatDB/blob/main/images/pages/page1.png" width="200" hspace="30">
+<!-- <img src="https://github.com/curiouslumber/ChatDB/blob/main/images/pages/page2.png" width="200" hspace="30" > <img src="https://github.com/curiouslumber/ChatDB/blob/main/images/pages/page3.png" width="200" hspace="30"> -->
 
 ## Technologies Used
 - Flutter and Dart
