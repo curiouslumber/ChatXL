@@ -35,9 +35,9 @@ class HomeFragmentState extends State<HomeFragment> {
             alignment: Alignment.topLeft,
             padding: const EdgeInsets.only(left: 32.0, right: 24.0),
             margin: const EdgeInsets.only(top: 16.0),
-            child: const Row(
+            child: Row(
               children: [
-                Expanded(
+                const Expanded(
                     flex: 4,
                     child: Text(
                       'Good Morning\nNoel,',
@@ -47,12 +47,31 @@ class HomeFragmentState extends State<HomeFragment> {
                           color: Color(0xffFFCFA3)),
                     )),
                 Expanded(
-                  flex: 2,
-                  child: CircleAvatar(
-                    radius: 34.0,
-                    backgroundColor: Colors.white,
-                  ),
-                ),
+                    flex: 2,
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            _CustomPageRoute(
+                              builder: (context) => FullScreenAvatarPage(),
+                              transitionBuilder: _transitionBuilder,
+                              tag: 'avatarTag',
+                            ),
+                          );
+                        },
+                        child: const Hero(
+                          tag: 'avatarTag',
+                          child: CircleAvatar(
+                            backgroundColor: Colors.white,
+                            radius: 50,
+                          ),
+                        ),
+                      ),
+                    )),
               ],
             ),
           ),
@@ -207,4 +226,59 @@ class HomeFragmentState extends State<HomeFragment> {
       ],
     );
   }
+}
+
+class FullScreenAvatarPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Full Screen Avatar'),
+      ),
+      body: Center(
+        child: GestureDetector(
+          onTap: () {
+            Navigator.pop(context); // Navigate back
+          },
+          child: const Hero(
+            tag: 'avatarTag',
+            child: CircleAvatar(
+              backgroundColor: Colors.white,
+              radius: 150, // Larger radius for full-screen effect
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _CustomPageRoute extends PageRouteBuilder {
+  final WidgetBuilder builder;
+  final Widget Function(
+          BuildContext, Animation<double>, Animation<double>, Widget)
+      transitionBuilder;
+  final String tag;
+
+  _CustomPageRoute({
+    required this.builder,
+    required this.transitionBuilder,
+    required this.tag,
+  }) : super(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              builder(context),
+          transitionsBuilder: transitionBuilder,
+        );
+}
+
+Widget _transitionBuilder(BuildContext context, Animation<double> animation,
+    Animation<double> secondaryAnimation, Widget child) {
+  const begin = Offset(0.0, 1.0);
+  const end = Offset.zero;
+  const curve = Curves.easeInOutQuart;
+
+  var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+  var offsetAnimation = animation.drive(tween);
+
+  return SlideTransition(position: offsetAnimation, child: child);
 }

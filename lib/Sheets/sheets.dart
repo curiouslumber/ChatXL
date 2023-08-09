@@ -73,6 +73,7 @@ class SheetsFragmentState extends State<SheetsFragment> {
                                 flex: 2,
                                 child: Text(
                                   contacts[index]['excelSheetName'],
+                                  maxLines: 2,
                                   style: const TextStyle(
                                     fontFamily: 'Ubuntu',
                                     color: Color.fromARGB(230, 48, 68, 67),
@@ -103,6 +104,7 @@ class SheetsFragmentState extends State<SheetsFragment> {
               style: ElevatedButton.styleFrom(
                   elevation: 3,
                   backgroundColor: Colors.white.withOpacity(0.55),
+                  foregroundColor: Colors.white.withOpacity(0.55),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0))),
               onPressed: () {

@@ -13,7 +13,11 @@ class HomePage2 extends StatefulWidget {
 
 class HomePage2State extends State<HomePage2> {
   int _selectedIndex = 1;
-  var fragments = [ChatFragment(), const HomeFragment(), SheetsFragment()];
+  var fragments = [
+    ChatFragment(),
+    const HomeFragment(),
+    const SheetsFragment()
+  ];
 
   void _onItemTapped(int index) {
     setState(() {
