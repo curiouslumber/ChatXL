@@ -2,10 +2,10 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-const String tableName = 'contacts';
+const String tableName = 'excelSheets';
 const String columnId = 'id';
-const String columnName = 'name';
-const String columnPhone = 'phone';
+const String columnName = 'excelSheetName';
+const String columnPhone = 'excelFilePath';
 
 class DatabaseHelper {
   // Singleton pattern to ensure only one instance of the database
@@ -40,18 +40,19 @@ class DatabaseHelper {
     ''');
   }
 
-  Future<int> insertContact(Contact contact) async {
+  Future<int> insertContact(ExcelSheets contact) async {
     Database db = await database;
+    // ignore: avoid_print
+    print("value inserted");
     return await db.insert(tableName, contact.toMap());
   }
 
-  Future<List<Contact>> getContacts() async {
+  Future<List<Map<String, Object?>>> getContacts() async {
     Database db = await database;
-    List<Map<String, dynamic>> maps = await db.query(tableName);
-    return maps.map((map) => Contact.fromMap(map)).toList();
+    return await db.query('excelSheets');
   }
 
-  Future<int> updateContact(Contact contact) async {
+  Future<int> updateContact(ExcelSheets contact) async {
     Database db = await database;
     return await db.update(tableName, contact.toMap(),
         where: '$columnId = ?', whereArgs: [contact.id]);
@@ -63,26 +64,27 @@ class DatabaseHelper {
   }
 }
 
-class Contact {
+class ExcelSheets {
   int? id;
-  String name;
-  String phone;
+  String excelSheetName;
+  String excelFilePath;
 
-  Contact({this.id, required this.name, required this.phone});
+  ExcelSheets(
+      {this.id, required this.excelSheetName, required this.excelFilePath});
 
   Map<String, dynamic> toMap() {
     return {
       columnId: id,
-      columnName: name,
-      columnPhone: phone,
+      columnName: excelSheetName,
+      columnPhone: excelFilePath,
     };
   }
 
-  factory Contact.fromMap(Map<String, dynamic> map) {
-    return Contact(
+  factory ExcelSheets.fromMap(Map<String, dynamic> map) {
+    return ExcelSheets(
       id: map[columnId],
-      name: map[columnName],
-      phone: map[columnPhone],
+      excelSheetName: map[columnName],
+      excelFilePath: map[columnPhone],
     );
   }
 }

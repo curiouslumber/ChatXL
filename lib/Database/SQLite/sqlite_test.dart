@@ -31,10 +31,7 @@ class SQLiteTestState extends State<SQLiteTest> {
           appBar: AppBar(),
           body: Center(
             child: ElevatedButton(
-              onPressed: () async {
-                await _addContact();
-                await _readContacts();
-              },
+              onPressed: () {},
               child: const Text('Save and Read Data'),
             ),
           ),
@@ -43,16 +40,16 @@ class SQLiteTestState extends State<SQLiteTest> {
     );
   }
 
-  Future<void> _addContact() async {
-    Contact newContact = Contact(name: 'John Doe', phone: '1234567890');
-    await dbHelper.insertContact(newContact);
-  }
+  // Future<void> _addContact() async {
+  //   Contact newContact = Contact(name: 'John Doe', phone: '1234567890');
+  //   await dbHelper.insertContact(newContact);
+  // }
 
-  Future<void> _readContacts() async {
-    List<Contact> contacts = await dbHelper.getContacts();
-    for (var contact in contacts) {
-      // ignore: avoid_print
-      print('Contact: ${contact.name}, Phone: ${contact.phone}');
-    }
-  }
+  // Future<void> _readContacts() async {
+  //   List<Contact> contacts = await dbHelper.getContacts();
+  //   for (var contact in contacts) {
+  //     // ignore: avoid_print
+  //     print('Contact: ${contact.name}, Phone: ${contact.phone}');
+  //   }
+  // }
 }
