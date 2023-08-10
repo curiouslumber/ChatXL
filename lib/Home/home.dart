@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class HomeFragment extends StatefulWidget {
   const HomeFragment({super.key});
@@ -57,7 +58,8 @@ class HomeFragmentState extends State<HomeFragment> {
                           Navigator.push(
                             context,
                             _CustomPageRoute(
-                              builder: (context) => FullScreenAvatarPage(),
+                              builder: (context) =>
+                                  const FullScreenAvatarPage(),
                               transitionBuilder: _transitionBuilder,
                               tag: 'avatarTag',
                             ),
@@ -68,6 +70,11 @@ class HomeFragmentState extends State<HomeFragment> {
                           child: CircleAvatar(
                             backgroundColor: Colors.white,
                             radius: 50,
+                            child: Icon(
+                              size: 40,
+                              Icons.person,
+                              color: Color(0xff405C5A),
+                            ),
                           ),
                         ),
                       ),
@@ -229,25 +236,75 @@ class HomeFragmentState extends State<HomeFragment> {
 }
 
 class FullScreenAvatarPage extends StatelessWidget {
+  const FullScreenAvatarPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Full Screen Avatar'),
+        backgroundColor: const Color(0xff405C5A),
+        foregroundColor: Colors.white,
       ),
-      body: Center(
-        child: GestureDetector(
-          onTap: () {
-            Navigator.pop(context); // Navigate back
-          },
-          child: const Hero(
-            tag: 'avatarTag',
-            child: CircleAvatar(
-              backgroundColor: Colors.white,
-              radius: 150, // Larger radius for full-screen effect
-            ),
-          ),
-        ),
+      body: Container(
+        alignment: Alignment.center,
+        color: const Color(0xff405C5A),
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Spacer(
+                flex: 1,
+              ),
+              const Expanded(
+                flex: 4,
+                child: Hero(
+                  tag: 'avatarTag',
+                  child: CircleAvatar(
+                    backgroundColor: Colors.white,
+                    radius: 80,
+                  ),
+                ),
+              ),
+              const Spacer(
+                flex: 1,
+              ),
+              Expanded(
+                  flex: 1,
+                  child: ElevatedButton(
+                      onPressed: () {}, child: const Text('Sign In'))),
+              const Spacer(
+                flex: 1,
+              ),
+              Expanded(
+                  flex: 1,
+                  child: ElevatedButton(
+                      onPressed: () {}, child: const Text('Register'))),
+              const Spacer(
+                flex: 1,
+              ),
+              Expanded(
+                flex: 1,
+                child: ElevatedButton(
+                    onPressed: () {},
+                    child: const SizedBox(
+                      width: 160.0,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(
+                            FontAwesomeIcons.google,
+                            size: 20,
+                          ),
+                          Text('Sign In With Google'),
+                        ],
+                      ),
+                    )),
+              ),
+              const Spacer(
+                flex: 2,
+              ),
+            ]),
       ),
     );
   }

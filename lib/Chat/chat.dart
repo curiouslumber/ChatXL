@@ -77,35 +77,38 @@ class ChatFragment extends StatelessWidget {
                       child: Container(),
                     ),
                     Container(
-                      margin: const EdgeInsets.only(bottom: 8.0),
+                      margin: const EdgeInsets.only(bottom: 10.0),
                       child: Row(children: [
                         Expanded(
                           flex: 6,
                           child: Container(
-                            margin: const EdgeInsets.only(right: 4.0),
+                            margin: const EdgeInsets.only(right: 8.0),
                             alignment: Alignment.center,
                             child: Obx(
                               () => TextField(
                                 controller: textEditingController,
-                                style: const TextStyle(fontSize: 14),
+                                style: const TextStyle(
+                                    fontSize: 14, color: Color(0xff034B40)),
                                 cursorColor: const Color(0xff034B40),
                                 decoration: InputDecoration(
                                   hintText: c.userMessage.value
-                                      ? 'Enter your message...'
+                                      ? ''
                                       : (p.activeConnection.value
                                           ? 'Please wait...'
                                           : 'Not Connected'),
-                                  enabledBorder: const OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(8.0)),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(8.0)),
                                     borderSide: BorderSide(
-                                        color: Color(0xff034B40), width: 1.0),
+                                        color: Colors.white.withOpacity(0.2),
+                                        width: 0.0),
                                   ),
-                                  focusedBorder: const OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(8.0)),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(8.0)),
                                     borderSide: BorderSide(
-                                        color: Color(0xff034B40), width: 2.0),
+                                        color: Colors.white.withOpacity(0.2),
+                                        width: 0.0),
                                   ),
                                   disabledBorder: const OutlineInputBorder(
                                     borderRadius:
@@ -114,8 +117,7 @@ class ChatFragment extends StatelessWidget {
                                         color: Colors.grey, width: 2.0),
                                   ),
                                   fillColor: c.userMessage.value
-                                      ? const Color(0xff034B40)
-                                          .withOpacity(0.05)
+                                      ? Colors.white.withOpacity(0.5)
                                       : Colors.grey.withOpacity(0.2),
                                   filled: true,
                                   enabled: c.userMessage.value,
@@ -126,7 +128,7 @@ class ChatFragment extends StatelessWidget {
                         ),
                         Expanded(
                           flex: 2,
-                          child: MaterialButton(
+                          child: ElevatedButton(
                             onPressed: () async {
                               await p.checkUserConnection();
                               if (p.activeConnection.value) {
@@ -152,8 +154,12 @@ class ChatFragment extends StatelessWidget {
                                 c.userMessage.value = false;
                               }
                             },
-                            height: 60,
-                            color: const Color(0xff034B40),
+                            style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8.0)),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 19.0),
+                                backgroundColor: const Color(0xff034B40)),
                             child: const Icon(
                               Icons.send,
                               color: Colors.white,
