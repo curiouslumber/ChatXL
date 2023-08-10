@@ -12,6 +12,7 @@ class Controller extends GetxController {
   var filePath = "".obs;
   var aiMessage = false.obs;
   var userMessage = true.obs;
+  var signedIn = false.obs;
 
   var aiMessages = [
     "Hey there! I'm you AI assistant Lisa from ChatDB. Ready to perform some database operations?"

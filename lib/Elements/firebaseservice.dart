@@ -1,11 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
+import '../Chat/controller.dart';
 
 class FirebaseService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-  Future<String?> signInwithGoogle() async {
+  final Controller c = Get.put(Controller());
+
+  Future<String?> signInWithGoogle() async {
     try {
       final GoogleSignInAccount? googleSignInAccount =
           await _googleSignIn.signIn();
@@ -21,7 +26,7 @@ class FirebaseService {
       print(e.message);
       rethrow;
     }
-    return "error";
+    return null;
   }
 
   Future<void> signOutFromGoogle() async {

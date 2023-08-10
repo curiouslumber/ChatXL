@@ -154,49 +154,7 @@ class AccountFragmentState extends State<Account> {
                                     Expanded(
                                         flex: 3,
                                         child: MaterialButton(
-                                          onPressed: () async {
-                                            void showMessage(String message) {
-                                              showDialog(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) {
-                                                    return AlertDialog(
-                                                      title:
-                                                          const Text("Error"),
-                                                      content: Text(message),
-                                                      actions: [
-                                                        TextButton(
-                                                          child:
-                                                              const Text("Ok"),
-                                                          onPressed: () {
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                          },
-                                                        )
-                                                      ],
-                                                    );
-                                                  });
-                                            }
-
-                                            setState(() {
-                                              isLoading = true;
-                                            });
-                                            FirebaseService service =
-                                                FirebaseService();
-                                            try {
-                                              await service.signInwithGoogle();
-                                              Get.offAll(
-                                                  () => const HomePage2());
-                                            } catch (e) {
-                                              if (e is FirebaseAuthException) {
-                                                showMessage(e.message!);
-                                              }
-                                            }
-                                            setState(() {
-                                              isLoading = false;
-                                            });
-                                          },
+                                          onPressed: () async {},
                                           color: Colors.green,
                                           child: Row(
                                             crossAxisAlignment:

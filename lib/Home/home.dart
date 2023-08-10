@@ -1,4 +1,5 @@
 import 'package:chatdb/Home/account.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class HomeFragment extends StatefulWidget {
@@ -9,6 +10,8 @@ class HomeFragment extends StatefulWidget {
 }
 
 class HomeFragmentState extends State<HomeFragment> {
+  User? user = FirebaseAuth.instance.currentUser;
+
   @override
   Widget build(BuildContext context) {
     // Responsive data
@@ -57,16 +60,39 @@ class HomeFragmentState extends State<HomeFragment> {
                             ),
                           );
                         },
-                        child: const Hero(
+                        child: Hero(
                           tag: 'avatarTag',
-                          child: CircleAvatar(
-                            backgroundColor: Colors.white,
-                            radius: 50,
-                            child: Icon(
-                              size: 40,
-                              Icons.person,
-                              color: Color(0xff405C5A),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black
+                                      .withOpacity(0.08), // Shadow color
+                                  spreadRadius:
+                                      5, // How far the shadow extends from the object
+                                  blurRadius:
+                                      4, // The radius of the shadow blur
+                                  offset: const Offset(0,
+                                      4), // The offset of the shadow from the object
+                                ),
+                              ],
                             ),
+                            child: user?.email! == null
+                                ? const CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    radius: 50,
+                                    child: Icon(
+                                      size: 40,
+                                      Icons.person,
+                                      color: Color(0xff405C5A),
+                                    ),
+                                  )
+                                : CircleAvatar(
+                                    backgroundImage:
+                                        NetworkImage(user!.photoURL!),
+                                    radius: 40,
+                                  ),
                           ),
                         ),
                       ),
