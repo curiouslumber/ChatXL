@@ -1,7 +1,7 @@
+import 'package:chatdb/Home/homepage2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import '../Home/homepage.dart';
 
 class IntroPage extends StatelessWidget {
   const IntroPage({super.key});
@@ -122,7 +122,7 @@ class IntroPage extends StatelessWidget {
                                     vertical: verticalPadding * 0.7),
                                 child: MaterialButton(
                                   onPressed: () {
-                                    Get.offAll(() => const HomePage());
+                                    Get.offAll(() => const HomePage2());
                                   },
                                   color: const Color(0xFFBFFE72),
                                   shape: const RoundedRectangleBorder(

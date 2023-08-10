@@ -21,7 +21,7 @@ class FirebaseService {
       print(e.message);
       rethrow;
     }
-    return null;
+    return "error";
   }
 
   Future<void> signOutFromGoogle() async {

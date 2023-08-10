@@ -1,4 +1,6 @@
+import 'package:chatdb/Home/account.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Sidebar extends StatelessWidget {
   const Sidebar({
@@ -7,6 +9,13 @@ class Sidebar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Responsive data
+    MediaQueryData mediaQueryData = MediaQuery.of(context);
+    // ignore: unused_local_variable
+    double availableWidth = mediaQueryData.size.width;
+    // ignore: unused_local_variable
+    double availableHeight = mediaQueryData.size.height;
+
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -18,18 +27,20 @@ class Sidebar extends StatelessWidget {
             child: Text(''),
           ),
           ListTile(
-            horizontalTitleGap: 4.0,
+            horizontalTitleGap: 16.0,
             leading: const Icon(
-              Icons.search,
+              Icons.person,
             ),
             title: const Text(
-              'Search History',
+              'Account',
               style: TextStyle(color: Color.fromARGB(255, 109, 109, 109)),
             ),
-            onTap: () {},
+            onTap: () {
+              Get.to(() => const FullScreenAvatarPage());
+            },
           ),
           ListTile(
-            horizontalTitleGap: 4.0,
+            horizontalTitleGap: 16.0,
             leading: const Icon(
               Icons.settings,
             ),
@@ -40,7 +51,7 @@ class Sidebar extends StatelessWidget {
             onTap: () {},
           ),
           ListTile(
-            horizontalTitleGap: 4.0,
+            horizontalTitleGap: 16.0,
             leading: const Icon(
               Icons.exit_to_app,
             ),

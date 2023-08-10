@@ -1,5 +1,5 @@
+import 'package:chatdb/Home/account.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class HomeFragment extends StatefulWidget {
   const HomeFragment({super.key});
@@ -17,14 +17,6 @@ class HomeFragmentState extends State<HomeFragment> {
     double availableWidth = mediaQueryData.size.width;
     // ignore: unused_local_variable
     double availableHeight = mediaQueryData.size.height;
-    // ignore: unused_local_variable
-    final double fontSize =
-        availableHeight * 0.025; // Adjust the multiplier as needed
-    double paddingFactor = 0.05;
-    // ignore: unused_local_variable
-    var horizontalpadding = mediaQueryData.size.width * paddingFactor;
-    // ignore: unused_local_variable
-    var verticalPadding = mediaQueryData.size.height * paddingFactor;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -231,81 +223,6 @@ class HomeFragmentState extends State<HomeFragment> {
           ),
         )
       ],
-    );
-  }
-}
-
-class FullScreenAvatarPage extends StatelessWidget {
-  const FullScreenAvatarPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xff405C5A),
-        foregroundColor: Colors.white,
-      ),
-      body: Container(
-        alignment: Alignment.center,
-        color: const Color(0xff405C5A),
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Spacer(
-                flex: 1,
-              ),
-              const Expanded(
-                flex: 4,
-                child: Hero(
-                  tag: 'avatarTag',
-                  child: CircleAvatar(
-                    backgroundColor: Colors.white,
-                    radius: 80,
-                  ),
-                ),
-              ),
-              const Spacer(
-                flex: 1,
-              ),
-              Expanded(
-                  flex: 1,
-                  child: ElevatedButton(
-                      onPressed: () {}, child: const Text('Sign In'))),
-              const Spacer(
-                flex: 1,
-              ),
-              Expanded(
-                  flex: 1,
-                  child: ElevatedButton(
-                      onPressed: () {}, child: const Text('Register'))),
-              const Spacer(
-                flex: 1,
-              ),
-              Expanded(
-                flex: 1,
-                child: ElevatedButton(
-                    onPressed: () {},
-                    child: const SizedBox(
-                      width: 160.0,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Icon(
-                            FontAwesomeIcons.google,
-                            size: 20,
-                          ),
-                          Text('Sign In With Google'),
-                        ],
-                      ),
-                    )),
-              ),
-              const Spacer(
-                flex: 2,
-              ),
-            ]),
-      ),
     );
   }
 }
