@@ -1,4 +1,4 @@
-# ChatXL - Flutter AI Project
+# ChatXL - An Excel Chat Application
 
 <img src="https://github.com/curiouslumber/ChatDB/blob/main/images/icon.svg" width="250">
 
