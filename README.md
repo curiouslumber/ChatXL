@@ -1,4 +1,4 @@
-# ChatDB - Flutter AI Project
+# ChatXL - Flutter AI Project
 
 <img src="https://github.com/curiouslumber/ChatDB/blob/main/images/icon.svg" width="250">
 
@@ -9,13 +9,14 @@ A flutter AI application where I encoporate the concept of neural network and na
 
 ## Technologies Used
 - Flutter and Dart
-- Django Rest Framework for making API calls and storage using python
+- Flask Framework for connecting to Rasa AI python framework to implement NLU (Natural Language Understanding)
 - Postman for Testing
-- SQLite Database
-- Firebase Authentication (Googe Sign In & Anonymous Sign In)
+- SQLite Database implementation both in Flutter and Rasa python
+- Firebase Authentication (Googe Sign In & User Sign In)
 - GetX State Management
 - Working with User Files
-- Awesome Icons and Glowing buttons
+- Awesome Icons and other pubspec dependencies
+- Figma for design
 
 ## Copyright Notice
 Even though I have published this on Github for public use, please feel free to mention my name if forking this project. Thanks! <br>
