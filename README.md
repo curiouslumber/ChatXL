@@ -1,4 +1,4 @@
-# ChatXL - An Excel Chat Application built using Flutter
+# ChatXL - An AI-based Excel Chat Application built using Flutter
 
 <img src="https://github.com/curiouslumber/ChatDB/blob/main/images/icon.svg" width="250">
 
