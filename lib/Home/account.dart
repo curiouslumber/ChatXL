@@ -1,3 +1,4 @@
+import 'package:chatdb/Account/signin.dart';
 import 'package:chatdb/Chat/controller.dart';
 import 'package:chatdb/Elements/checkinternet.dart';
 import 'package:chatdb/Elements/firebaseservice.dart';
@@ -6,6 +7,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+
+import '../Account/register.dart';
 
 // ignore: must_be_immutable
 class FullScreenAvatarPage extends StatefulWidget {
@@ -122,7 +125,9 @@ class FullScreenAvatarPageState extends State<FullScreenAvatarPage> {
                                     borderRadius: BorderRadius.circular(16.0),
                                   ),
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  Get.to(() => SignInPage());
+                                },
                                 child: const Text(
                                   'Sign In',
                                   style: TextStyle(
@@ -166,7 +171,9 @@ class FullScreenAvatarPageState extends State<FullScreenAvatarPage> {
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(16.0))),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Get.to(() => RegisterPage());
+                                    },
                                     child: const Text(
                                       'Register',
                                       style: TextStyle(
@@ -339,7 +346,7 @@ class FullScreenAvatarPageState extends State<FullScreenAvatarPage> {
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(
                                       fontFamily: 'Ubuntu',
-                                      color: Colors.white),
+                                      color: Color(0xffFFCFA3)),
                                 )
                               : const Text('Logged in as Guest'),
                         ),
