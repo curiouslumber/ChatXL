@@ -36,7 +36,7 @@ class Sidebar extends StatelessWidget {
               style: TextStyle(color: Color.fromARGB(255, 109, 109, 109)),
             ),
             onTap: () {
-              Get.to(() => FullScreenAvatarPage());
+              Get.to(() => const FullScreenAvatarPage());
             },
           ),
           ListTile(

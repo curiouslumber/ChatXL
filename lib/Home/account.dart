@@ -207,48 +207,41 @@ class FullScreenAvatarPageState extends State<FullScreenAvatarPage> {
                                           borderRadius:
                                               BorderRadius.circular(16.0))),
                                   onPressed: () async {
-                                    p.checkUserConnection();
-                                    if (p.activeConnection.value) {
-                                      void showMessage(String message) {
-                                        showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return AlertDialog(
-                                                title: const Text("Error"),
-                                                content: Text(message),
-                                                actions: [
-                                                  TextButton(
-                                                    child: const Text("Ok"),
-                                                    onPressed: () {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                  )
-                                                ],
-                                              );
-                                            });
-                                      }
-
-                                      setState(() {
-                                        isLoading = true;
-                                      });
-                                      FirebaseService service =
-                                          FirebaseService();
-                                      try {
-                                        await service.signInWithGoogle();
-                                        Get.offAll(() => const HomePage2());
-                                      } catch (e) {
-                                        if (e is FirebaseAuthException) {
-                                          showMessage(e.message!);
-                                        }
-                                      }
-                                      setState(() {
-                                        c.signedIn.value = true;
-                                        isLoading = false;
-                                      });
-                                    } else {
-                                      print("No Internet Connection");
+                                    void showMessage(String message) {
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: const Text("Error"),
+                                              content: Text(message),
+                                              actions: [
+                                                TextButton(
+                                                  child: const Text("Ok"),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                )
+                                              ],
+                                            );
+                                          });
                                     }
+
+                                    setState(() {
+                                      isLoading = true;
+                                    });
+                                    FirebaseService service = FirebaseService();
+                                    try {
+                                      await service.signInWithGoogle();
+                                      Get.offAll(() => const HomePage2());
+                                    } catch (e) {
+                                      if (e is FirebaseAuthException) {
+                                        showMessage(e.message!);
+                                      }
+                                    }
+                                    setState(() {
+                                      c.signedIn.value = true;
+                                      isLoading = false;
+                                    });
                                   },
                                   child: const SizedBox(
                                     width: 180,
