@@ -3,14 +3,22 @@ import 'package:get/get.dart';
 import '../Elements/checkinternet.dart';
 import 'controller.dart';
 
-class ChatFragment extends StatelessWidget {
-  ChatFragment({super.key});
+class ChatFragment extends StatefulWidget {
+  ChatFragmentState createState() => ChatFragmentState();
+}
 
+class ChatFragmentState extends State<ChatFragment> {
   final Controller c = Get.put(Controller());
   final CheckInternet p = Get.put(CheckInternet());
   final TextEditingController textEditingController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQueryData = MediaQuery.of(context);
+    // ignore: unused_local_variable
+    double availableWidth = mediaQueryData.size.width;
+    // ignore: unused_local_variable
+    double availableHeight = mediaQueryData.size.height;
+
     return Container(
       margin: const EdgeInsets.only(right: 16.0, left: 16.0, bottom: 8.0),
       decoration: const BoxDecoration(
@@ -27,7 +35,9 @@ class ChatFragment extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.only(right: 4.0),
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          _showPopup(context, availableWidth, availableHeight);
+                        },
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white.withOpacity(0.5),
                             foregroundColor: Colors.white.withOpacity(0.5),
@@ -175,4 +185,131 @@ class ChatFragment extends StatelessWidget {
       ),
     );
   }
+}
+
+void _showPopup(BuildContext context, var availableWidth, var availableHeight) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+        backgroundColor: const Color(0xffD9D9D9),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+        content: Container(
+          width: availableWidth,
+          alignment: Alignment.center,
+          height: availableHeight / 4,
+          child: Column(
+            children: [
+              Expanded(
+                flex: 3,
+                child: Container(
+                  alignment: Alignment.center,
+                  child: ListView.builder(
+                    itemCount: 1,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        leading: const Text(
+                          'Abc.xlsx',
+                          style: TextStyle(
+                              fontFamily: 'Ubuntu',
+                              color: Color.fromARGB(255, 255, 218, 184),
+                              fontSize: 14.0),
+                        ),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.0)),
+                        tileColor: const Color(0xff034B40),
+                      );
+                    },
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Container(
+                  margin: const EdgeInsets.only(top: 8.0, bottom: 2.0),
+                  alignment: Alignment.center,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        flex: 20,
+                        child: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8.0),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black
+                                    .withOpacity(0.05), // Shadow color
+                                spreadRadius:
+                                    3, // How far the shadow extends from the object
+                                blurRadius: 2, // The radius of the shadow blur
+                                offset: const Offset(0,
+                                    3), // The offset of the shadow from the object
+                              ),
+                            ],
+                          ),
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8.0))),
+                            onPressed: () {
+                              // Perform submit action
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text(
+                              'Close',
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: Color.fromARGB(255, 3, 59, 51)),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const Spacer(
+                        flex: 2,
+                      ),
+                      Expanded(
+                        flex: 20,
+                        child: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8.0),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black
+                                    .withOpacity(0.05), // Shadow color
+                                spreadRadius:
+                                    3, // How far the shadow extends from the object
+                                blurRadius: 2, // The radius of the shadow blur
+                                offset: const Offset(0,
+                                    3), // The offset of the shadow from the object
+                              ),
+                            ],
+                          ),
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8.0))),
+                            onPressed: () {},
+                            child: const Text('Submit',
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    color: Color.fromARGB(255, 3, 59, 51))),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
 }
