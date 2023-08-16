@@ -36,7 +36,8 @@ class ChatFragmentState extends State<ChatFragment> {
                       padding: const EdgeInsets.only(right: 4.0),
                       child: ElevatedButton(
                         onPressed: () {
-                          _showPopup(context, availableWidth, availableHeight);
+                          _showPopup(context, availableWidth, availableHeight,
+                              c.sheetSelected);
                         },
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white.withOpacity(0.5),
@@ -187,7 +188,8 @@ class ChatFragmentState extends State<ChatFragment> {
   }
 }
 
-void _showPopup(BuildContext context, var availableWidth, var availableHeight) {
+void _showPopup(BuildContext context, var availableWidth, var availableHeight,
+    RxInt sheetSelected) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -211,6 +213,22 @@ void _showPopup(BuildContext context, var availableWidth, var availableHeight) {
                     itemCount: 1,
                     itemBuilder: (context, index) {
                       return ListTile(
+                        contentPadding: const EdgeInsets.only(left: 16.0),
+                        trailing: Obx(
+                          () => Radio<int>(
+                              fillColor: MaterialStateProperty.all<Color?>(
+                                  const Color.fromARGB(255, 225, 197, 139)),
+                              value: sheetSelected.value,
+                              groupValue: 1,
+                              onChanged: (int? val) {
+                                print(val);
+                                if (val == 0) {
+                                  sheetSelected.value = 1;
+                                } else {
+                                  sheetSelected.value = 0;
+                                }
+                              }),
+                        ),
                         leading: const Text(
                           'Abc.xlsx',
                           style: TextStyle(
@@ -257,6 +275,7 @@ void _showPopup(BuildContext context, var availableWidth, var availableHeight) {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8.0))),
                             onPressed: () {
+                              sheetSelected.value = 0;
                               // Perform submit action
                               Navigator.of(context).pop();
                             },

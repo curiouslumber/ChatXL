@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:chatdb/Sheets/controller.dart';
+import 'package:chatdb/Sheets/sheetpage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,6 +19,7 @@ class SheetsFragment extends StatefulWidget {
 class SheetsFragmentState extends State<SheetsFragment> {
   final Controller c = Get.put(Controller());
   final CheckInternet p = Get.put(CheckInternet());
+  SheetController f = Get.put(SheetController());
   final dbHelper = DatabaseHelper();
 
   @override
@@ -65,18 +68,36 @@ class SheetsFragmentState extends State<SheetsFragment> {
                               )
                             ],
                           ),
-                          padding: const EdgeInsets.only(left: 32.0),
                           alignment: Alignment.centerLeft,
                           child: Row(
                             children: [
                               Expanded(
                                 flex: 2,
-                                child: Text(
-                                  contacts[index]['excelSheetName'],
-                                  maxLines: 2,
-                                  style: const TextStyle(
-                                    fontFamily: 'Ubuntu',
-                                    color: Color.fromARGB(230, 48, 68, 67),
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    f.filePath.value =
+                                        contacts[index]['excelFilePath'];
+                                    Future.delayed(
+                                        const Duration(milliseconds: 1500), () {
+                                      Get.to(() => SheetPage(f.filePath.value));
+                                    });
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                      elevation: 0,
+                                      alignment: Alignment.centerLeft,
+                                      foregroundColor:
+                                          Colors.white.withOpacity(0.5),
+                                      backgroundColor: Colors.transparent,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(0.0))),
+                                  child: Text(
+                                    contacts[index]['excelSheetName'],
+                                    maxLines: 2,
+                                    style: const TextStyle(
+                                      fontFamily: 'Ubuntu',
+                                      color: Color.fromARGB(230, 48, 68, 67),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -173,57 +194,5 @@ class SheetsFragmentState extends State<SheetsFragment> {
   void _deleteContact(int contactId) async {
     await dbHelper.deleteContact(contactId);
     setState(() {}); // Refresh the UI after deletion
-  }
-}
-
-class SheetWidget extends StatelessWidget {
-  const SheetWidget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: 1,
-      itemBuilder: (context, index) {
-        return Container(
-          margin: const EdgeInsets.only(bottom: 16.0),
-          height: 60,
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.5),
-            borderRadius: BorderRadius.circular(8.0),
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 4,
-                  offset: const Offset(0, 3),
-                  spreadRadius: 2)
-            ],
-          ),
-          padding: const EdgeInsets.only(left: 32.0),
-          alignment: Alignment.centerLeft,
-          child: const Row(
-            children: [
-              Expanded(
-                flex: 2,
-                child: Text(
-                  'Abc.xlsx',
-                  style: TextStyle(
-                      fontFamily: 'Ubuntu',
-                      color: Color.fromARGB(230, 48, 68, 67)),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Icon(
-                  Icons.remove,
-                  color: Color.fromARGB(220, 48, 68, 67),
-                ),
-              )
-            ],
-          ),
-        );
-      },
-    );
   }
 }
