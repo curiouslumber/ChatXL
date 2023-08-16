@@ -36,7 +36,7 @@ class HomeFragmentState extends State<HomeFragment> {
                 const Expanded(
                     flex: 4,
                     child: Text(
-                      'Good Morning\nNoel,',
+                      'Good Morning\nUser,',
                       style: TextStyle(
                           fontSize: 22,
                           fontFamily: 'Ubuntu',

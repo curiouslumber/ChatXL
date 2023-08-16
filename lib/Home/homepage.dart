@@ -33,7 +33,7 @@ class HomePageState extends State<HomePage> {
         iconTheme: const IconThemeData(color: Color(0xffFFCFA3)),
         centerTitle: true,
         title: const Text(
-          'ChatDB',
+          'ChatXL',
           style: TextStyle(
             fontFamily: 'Ubuntu',
             fontSize: 20,

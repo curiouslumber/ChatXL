@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../Database/databasehelper.dart';
 import '../Elements/checkinternet.dart';
 import 'controller.dart';
 
@@ -14,6 +15,8 @@ class ChatFragmentState extends State<ChatFragment> {
   final Controller c = Get.put(Controller());
   final CheckInternet p = Get.put(CheckInternet());
   final TextEditingController textEditingController = TextEditingController();
+  final dbHelper = DatabaseHelper();
+
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQueryData = MediaQuery.of(context);
@@ -40,7 +43,7 @@ class ChatFragmentState extends State<ChatFragment> {
                       child: ElevatedButton(
                         onPressed: () {
                           _showPopup(context, availableWidth, availableHeight,
-                              c.sheetSelected);
+                              c.sheetSelected, dbHelper);
                         },
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white.withOpacity(0.5),
@@ -192,7 +195,7 @@ class ChatFragmentState extends State<ChatFragment> {
 }
 
 void _showPopup(BuildContext context, var availableWidth, var availableHeight,
-    RxInt sheetSelected) {
+    RxInt sheetSelected, DatabaseHelper dbHelper) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -212,38 +215,71 @@ void _showPopup(BuildContext context, var availableWidth, var availableHeight,
                 flex: 3,
                 child: Container(
                   alignment: Alignment.center,
-                  child: ListView.builder(
-                    itemCount: 1,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        contentPadding: const EdgeInsets.only(left: 16.0),
-                        trailing: Obx(
-                          () => Radio<int>(
-                              fillColor: MaterialStateProperty.all<Color?>(
-                                  const Color.fromARGB(255, 225, 197, 139)),
-                              value: sheetSelected.value,
-                              groupValue: 1,
-                              onChanged: (int? val) {
-                                if (val == 0) {
-                                  sheetSelected.value = 1;
-                                } else {
-                                  sheetSelected.value = 0;
-                                }
-                              }),
-                        ),
-                        leading: const Text(
-                          'Abc.xlsx',
-                          style: TextStyle(
-                              fontFamily: 'Ubuntu',
-                              color: Color.fromARGB(255, 255, 218, 184),
-                              fontSize: 14.0),
-                        ),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12.0)),
-                        tileColor: const Color(0xff034B40),
-                      );
-                    },
-                  ),
+                  child: FutureBuilder<List<Map<String, dynamic>>>(
+                      future: dbHelper.getContacts(),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return Container();
+                        } else {
+                          List<Map<String, dynamic>> contacts = snapshot.data!;
+                          return ListView.builder(
+                            itemCount: contacts.length,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                alignment: Alignment.center,
+                                margin: const EdgeInsets.only(bottom: 8.0),
+                                child: ElevatedButton(
+                                  onPressed: () {},
+                                  style: ElevatedButton.styleFrom(
+                                    foregroundColor: Colors.white,
+                                    padding: const EdgeInsets.only(
+                                        left: 16.0, right: 0),
+                                    backgroundColor: const Color(0xff034B40),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(12.0)),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 2,
+                                        child: Text(
+                                          contacts[index]['excelSheetName'],
+                                          style: const TextStyle(
+                                              overflow: TextOverflow.ellipsis,
+                                              fontFamily: 'Ubuntu',
+                                              color: Color.fromARGB(
+                                                  255, 255, 218, 184),
+                                              fontSize: 14.0),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 1,
+                                        child: Obx(
+                                          () => Radio<int>(
+                                              fillColor: MaterialStateProperty
+                                                  .all<Color?>(
+                                                      const Color.fromARGB(
+                                                          255, 225, 197, 139)),
+                                              value: sheetSelected.value,
+                                              groupValue: 1,
+                                              onChanged: (int? val) {
+                                                if (val == 0) {
+                                                  sheetSelected.value = 1;
+                                                } else {
+                                                  sheetSelected.value = 0;
+                                                }
+                                              }),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        }
+                      }),
                 ),
               ),
               Expanded(
@@ -274,6 +310,7 @@ void _showPopup(BuildContext context, var availableWidth, var availableHeight,
                           ),
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
+                                foregroundColor: Colors.white,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8.0))),
                             onPressed: () {
@@ -313,6 +350,7 @@ void _showPopup(BuildContext context, var availableWidth, var availableHeight,
                           ),
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
+                                foregroundColor: Colors.white,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8.0))),
                             onPressed: () {},
