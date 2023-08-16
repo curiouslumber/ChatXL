@@ -2,7 +2,7 @@ import 'package:chatdb/Account/signin.dart';
 import 'package:chatdb/Chat/controller.dart';
 import 'package:chatdb/Elements/checkinternet.dart';
 import 'package:chatdb/Elements/firebaseservice.dart';
-import 'package:chatdb/Home/homepage2.dart';
+import 'package:chatdb/Home/homepage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -239,7 +239,7 @@ class FullScreenAvatarPageState extends State<FullScreenAvatarPage> {
                                     FirebaseService service = FirebaseService();
                                     try {
                                       await service.signInWithGoogle();
-                                      Get.offAll(() => const HomePage2());
+                                      Get.offAll(() => const HomePage());
                                     } catch (e) {
                                       if (e is FirebaseAuthException) {
                                         showMessage(e.message!);
@@ -388,7 +388,7 @@ class FullScreenAvatarPageState extends State<FullScreenAvatarPage> {
                                 FirebaseService service = FirebaseService();
                                 try {
                                   await service.signOutFromGoogle();
-                                  Get.offAll(() => const HomePage2());
+                                  Get.offAll(() => const HomePage());
                                 } catch (e) {
                                   if (e is FirebaseAuthException) {}
                                 }

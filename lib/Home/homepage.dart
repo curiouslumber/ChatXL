@@ -4,17 +4,17 @@ import 'package:chatdb/Home/home.dart';
 import 'package:chatdb/Sheets/sheets.dart';
 import 'package:flutter/material.dart';
 
-class HomePage2 extends StatefulWidget {
-  const HomePage2({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  HomePage2State createState() => HomePage2State();
+  HomePageState createState() => HomePageState();
 }
 
-class HomePage2State extends State<HomePage2> {
+class HomePageState extends State<HomePage> {
   int _selectedIndex = 1;
   var fragments = [
-    ChatFragment(),
+    const ChatFragment(),
     const HomeFragment(),
     const SheetsFragment()
   ];

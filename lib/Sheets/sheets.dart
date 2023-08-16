@@ -1,12 +1,11 @@
 import 'dart:io';
-import 'package:chatdb/Sheets/controller.dart';
 import 'package:chatdb/Sheets/sheetpage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:excel/excel.dart' as prefix;
 import '../Chat/controller.dart';
-import '../Database/SQLite/databasehelper.dart';
+import '../Database/databasehelper.dart';
 import '../Elements/checkinternet.dart';
 
 class SheetsFragment extends StatefulWidget {
@@ -19,7 +18,6 @@ class SheetsFragment extends StatefulWidget {
 class SheetsFragmentState extends State<SheetsFragment> {
   final Controller c = Get.put(Controller());
   final CheckInternet p = Get.put(CheckInternet());
-  SheetController f = Get.put(SheetController());
   final dbHelper = DatabaseHelper();
 
   @override
@@ -75,11 +73,12 @@ class SheetsFragmentState extends State<SheetsFragment> {
                                 flex: 2,
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    f.filePath.value =
+                                    var filePath =
                                         contacts[index]['excelFilePath'];
+                                    // print(filePath);
                                     Future.delayed(
                                         const Duration(milliseconds: 1500), () {
-                                      Get.to(() => SheetPage(f.filePath.value));
+                                      Get.to(() => SheetPage(filePath));
                                     });
                                   },
                                   style: ElevatedButton.styleFrom(

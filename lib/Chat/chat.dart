@@ -4,6 +4,9 @@ import '../Elements/checkinternet.dart';
 import 'controller.dart';
 
 class ChatFragment extends StatefulWidget {
+  const ChatFragment({super.key});
+
+  @override
   ChatFragmentState createState() => ChatFragmentState();
 }
 
@@ -221,7 +224,6 @@ void _showPopup(BuildContext context, var availableWidth, var availableHeight,
                               value: sheetSelected.value,
                               groupValue: 1,
                               onChanged: (int? val) {
-                                print(val);
                                 if (val == 0) {
                                   sheetSelected.value = 1;
                                 } else {

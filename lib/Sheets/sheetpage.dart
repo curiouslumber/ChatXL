@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -112,9 +114,13 @@ class SheetPageState extends State<SheetPage> {
   }
 
   Future<List<List<String>>> readExcel() async {
-    final ByteData data =
-        await rootBundle.load(filePath); // Replace with your Excel file path
-    final bytes = data.buffer.asUint8List();
+    final File file = File(filePath); // Use the picked file path directly
+
+    if (!await file.exists()) {
+      throw Exception("File does not exist.");
+    }
+
+    final Uint8List bytes = await file.readAsBytes();
 
     Excel excel = Excel.decodeBytes(bytes);
     String firstSheet = excel.tables.keys.first;

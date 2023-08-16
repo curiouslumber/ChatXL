@@ -1,4 +1,4 @@
-import 'package:chatdb/Home/homepage2.dart';
+import 'package:chatdb/Home/homepage.dart';
 import 'package:chatdb/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +25,6 @@ class MyApp extends StatelessWidget {
             Color.fromARGB(255, 195, 204, 202), // Set your desired color here
       ),
     );
-    return const GetMaterialApp(home: HomePage2());
+    return const GetMaterialApp(home: HomePage());
   }
 }
