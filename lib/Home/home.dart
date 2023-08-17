@@ -2,6 +2,8 @@ import 'package:chatdb/Home/account.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../Database/databasehelper.dart';
+
 class HomeFragment extends StatefulWidget {
   const HomeFragment({super.key});
 
@@ -11,6 +13,7 @@ class HomeFragment extends StatefulWidget {
 
 class HomeFragmentState extends State<HomeFragment> {
   User? user = FirebaseAuth.instance.currentUser;
+  final dbHelper = DatabaseHelper();
 
   @override
   Widget build(BuildContext context) {
@@ -170,106 +173,123 @@ class HomeFragmentState extends State<HomeFragment> {
                   child: Container(
                     alignment: Alignment.topCenter,
                     padding: const EdgeInsets.only(bottom: 14.0),
-                    child: Row(children: [
-                      Expanded(
-                        flex: 1,
-                        child: Column(
-                          children: [
+                    child: FutureBuilder<List<Map<String, dynamic>>>(
+                      future: dbHelper.getContacts(),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return Container();
+                        } else {
+                          List<Map<String, dynamic>> contacts = snapshot.data!;
+
+                          return Row(children: [
                             Expanded(
-                              flex: 5,
-                              child: Container(
-                                alignment: Alignment.center,
-                                child: Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    const Text(
-                                      '3/10',
-                                      style: TextStyle(
-                                          fontSize: 14, color: Colors.white),
-                                    ),
-                                    Transform.scale(
-                                      scale: availableHeight / 320,
-                                      child: Transform.rotate(
-                                        angle: -1.55,
-                                        child: const CircularProgressIndicator(
-                                          value: 0.3,
-                                          strokeWidth: 3,
-                                          backgroundColor: Colors.white,
-                                          valueColor:
-                                              AlwaysStoppedAnimation<Color>(
+                              flex: 1,
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                    flex: 5,
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      child: Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          Text(
+                                            '${contacts.length}/10',
+                                            style: const TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.white),
+                                          ),
+                                          Transform.scale(
+                                            scale: availableHeight / 320,
+                                            child: Transform.rotate(
+                                              angle: -1.55,
+                                              child: CircularProgressIndicator(
+                                                value: contacts.length / 10,
+                                                strokeWidth: 3,
+                                                backgroundColor: Colors.white,
+                                                valueColor:
+                                                    const AlwaysStoppedAnimation<
+                                                        Color>(
                                                   Color.fromARGB(
-                                                      255, 189, 147, 107)),
-                                        ),
+                                                      255, 189, 147, 107),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                  const Expanded(
+                                    flex: 1,
+                                    child: Text(
+                                      'Sheets',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontFamily: 'Ubuntu',
+                                          color: Color(0xffFFCFA3)),
+                                    ),
+                                  )
+                                ],
                               ),
                             ),
-                            const Expanded(
-                              flex: 1,
-                              child: Text(
-                                'Sheets',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontFamily: 'Ubuntu',
-                                    color: Color(0xffFFCFA3)),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Column(
-                          children: [
                             Expanded(
-                              flex: 5,
-                              child: Container(
-                                alignment: Alignment.center,
-                                child: Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    const Text(
-                                      '54/100',
-                                      style: TextStyle(
-                                          fontSize: 14, color: Colors.white),
-                                    ),
-                                    Transform.scale(
-                                      scale: availableHeight / 320,
-                                      child: Transform.rotate(
-                                        angle: -1.55,
-                                        child: const CircularProgressIndicator(
-                                          value: 0.54,
-                                          strokeWidth: 3,
-                                          backgroundColor: Colors.white,
-                                          valueColor:
-                                              AlwaysStoppedAnimation<Color>(
-                                                  Color.fromARGB(
-                                                      255, 189, 147, 107)),
-                                        ),
+                              flex: 1,
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                    flex: 5,
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      child: Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          const Text(
+                                            '0/50',
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.white),
+                                          ),
+                                          Transform.scale(
+                                            scale: availableHeight / 320,
+                                            child: Transform.rotate(
+                                              angle: -1.55,
+                                              child:
+                                                  const CircularProgressIndicator(
+                                                value: 0,
+                                                strokeWidth: 3,
+                                                backgroundColor: Colors.white,
+                                                valueColor:
+                                                    AlwaysStoppedAnimation<
+                                                            Color>(
+                                                        Color.fromARGB(255, 189,
+                                                            147, 107)),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                  const Expanded(
+                                    flex: 1,
+                                    child: Text(
+                                      'Tasks',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontFamily: 'Ubuntu',
+                                          fontSize: 14,
+                                          color: Color(0xffFFCFA3)),
+                                    ),
+                                  )
+                                ],
                               ),
                             ),
-                            const Expanded(
-                              flex: 1,
-                              child: Text(
-                                'Tasks',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontFamily: 'Ubuntu',
-                                    fontSize: 14,
-                                    color: Color(0xffFFCFA3)),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ]),
+                          ]);
+                        }
+                      },
+                    ),
                   ),
                 ),
               ]),

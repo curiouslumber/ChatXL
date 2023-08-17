@@ -18,6 +18,8 @@ class ChatFragmentState extends State<ChatFragment> {
   final TextEditingController textEditingController = TextEditingController();
   final dbHelper = DatabaseHelper();
 
+  final ScrollController _scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQueryData = MediaQuery.of(context);
@@ -57,7 +59,8 @@ class ChatFragmentState extends State<ChatFragment> {
                                 borderRadius: BorderRadius.circular(12.0))),
                         child: Obx(
                           () => Text(
-                            c.selectedFileName.value == ""
+                            (c.selectedFileName.value == "" ||
+                                    c.submittedSheet.value == "")
                                 ? 'Select sheet'
                                 : c.selectedFileName.value,
                             maxLines: 1,
@@ -109,6 +112,7 @@ class ChatFragmentState extends State<ChatFragment> {
                             ? Container(
                                 alignment: Alignment.topCenter,
                                 child: ListView.builder(
+                                    controller: _scrollController,
                                     scrollDirection: Axis.vertical,
                                     itemCount: c.messageCount.value,
                                     itemBuilder: (context, index) {
@@ -163,7 +167,17 @@ class ChatFragmentState extends State<ChatFragment> {
                                       return null;
                                     }),
                               )
-                            : Container(),
+                            : Container(
+                                alignment: Alignment.center,
+                                child: const Text(
+                                  'Select a sheet \nto connect to the chat ',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Color.fromARGB(255, 35, 76, 65),
+                                      fontFamily: 'Ubuntu',
+                                      fontSize: 16),
+                                ),
+                              ),
                       ),
                     ),
                     Container(
@@ -207,14 +221,20 @@ class ChatFragmentState extends State<ChatFragment> {
                                         color: Colors.grey, width: 2.0),
                                   ),
                                   fillColor: p.activeConnection.value
-                                      ? (c.userMessage.value
-                                          ? Colors.white.withOpacity(0.5)
-                                          : Colors.grey.withOpacity(0.2))
+                                      ? (c.submittedSheet.value != ""
+                                          ? (c.userMessage.value
+                                              ? Colors.white.withOpacity(0.5)
+                                              : Colors.grey.withOpacity(0.2))
+                                          : const Color.fromARGB(
+                                                  255, 125, 125, 125)
+                                              .withOpacity(1))
                                       : const Color.fromARGB(255, 125, 125, 125)
                                           .withOpacity(1),
                                   filled: true,
                                   enabled: p.activeConnection.value
-                                      ? c.userMessage.value
+                                      ? (c.submittedSheet.value != ""
+                                          ? c.userMessage.value
+                                          : false)
                                       : false,
                                 ),
                               ),
@@ -251,14 +271,17 @@ class ChatFragmentState extends State<ChatFragment> {
                                 }
                               },
                               style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8.0)),
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 19.0),
-                                  backgroundColor: p.activeConnection.value
-                                      ? const Color(0xff034B40)
-                                      : const Color.fromARGB(
-                                          255, 119, 119, 119)),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8.0)),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 19.0),
+                                backgroundColor: p.activeConnection.value
+                                    ? (c.submittedSheet.value != ""
+                                        ? const Color(0xff034B40)
+                                        : const Color.fromARGB(
+                                            255, 119, 119, 119))
+                                    : const Color.fromARGB(255, 119, 119, 119),
+                              ),
                               child: const Icon(
                                 Icons.send,
                                 color: Colors.white,
@@ -391,6 +414,7 @@ void _showPopup(BuildContext context, var availableWidth, var availableHeight,
                                     borderRadius: BorderRadius.circular(8.0))),
                             onPressed: () {
                               if (c.sheetSelected.value == -1) {
+                                c.submittedSheet.value = "";
                                 c.selectedFileName.value = "";
                                 c.selectedFilePath.value = "";
                               }
