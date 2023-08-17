@@ -8,8 +8,10 @@ class Controller extends GetxController {
   var userMessagesObx = [""].obs;
   RxList<int> userMessageIndexesObx = [1].obs;
   RxList<String> aioruser = [""].obs;
+
   var fileImported = false.obs;
   var filePath = "".obs;
+
   var aiMessage = false.obs;
   var userMessage = true.obs;
   var signedIn = false.obs;
@@ -20,8 +22,7 @@ class Controller extends GetxController {
   var submittedSheet = "".obs;
 
   var aiMessages = [
-    "Sheet uploaded successfully",
-    "Hey there! I'm your AI assistant Lisa from ChatDB. Ready to perform some database operations?"
+    "Sheet uploaded successfully\n\nHey there! I'm your AI assistant Lisa from ChatDB. Ready to perform some database operations?"
   ].obs;
   RxList<int> aiMessageIndexesObx = [1].obs;
 

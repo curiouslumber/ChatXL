@@ -1,3 +1,4 @@
+import 'package:chatdb/Chat/message_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../Database/databasehelper.dart';
@@ -108,34 +109,58 @@ class ChatFragmentState extends State<ChatFragment> {
                             ? Container(
                                 alignment: Alignment.topCenter,
                                 child: ListView.builder(
-                                    itemCount: 2,
+                                    scrollDirection: Axis.vertical,
+                                    itemCount: c.messageCount.value,
                                     itemBuilder: (context, index) {
-                                      return Container(
-                                        alignment: Alignment.centerLeft,
-                                        margin:
-                                            const EdgeInsets.only(bottom: 8.0),
-                                        child: Container(
-                                            width: availableWidth / 1.3,
-                                            decoration: const BoxDecoration(
-                                              borderRadius: BorderRadius.only(
-                                                  topRight:
-                                                      Radius.circular(12.0),
-                                                  bottomLeft:
-                                                      Radius.circular(12.0),
-                                                  bottomRight:
-                                                      Radius.circular(12.0)),
-                                              color: Color(0xff034B40),
-                                            ),
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0, vertical: 8.0),
-                                            child: Text(
-                                              c.aiMessages.elementAt(index),
-                                              style: const TextStyle(
-                                                  fontFamily: 'Ubuntu',
-                                                  fontSize: 14,
-                                                  color: Colors.white),
-                                            )),
-                                      );
+                                      if (index == 0) {
+                                        if (!c.aioruser.contains("ai")) {
+                                          c.aioruser.add("ai");
+                                        }
+                                        return AIMessageWidget(
+                                          availableWidth: availableWidth,
+                                          c: c,
+                                          message: c.aiMessages.elementAt(0),
+                                        );
+                                      } else if (index != 0 &&
+                                          index != 1 &&
+                                          c.aioruser.elementAt(index - 1) ==
+                                              "ai") {
+                                        return AIMessageWidget(
+                                          availableWidth: availableWidth,
+                                          c: c,
+                                          message: c.aiMessages.elementAt(0),
+                                        );
+                                      } else if (index != 0 &&
+                                          index != 1 &&
+                                          c.aioruser.elementAt(index - 1) ==
+                                              "user") {
+                                        if (c.userMessageIndexesObx
+                                            .contains(index)) {
+                                          return SenderMessageWidget(
+                                              availableWidth: availableWidth,
+                                              c: c,
+                                              message: c.userMessagesObx
+                                                  .elementAt(c
+                                                      .userMessageIndexesObx
+                                                      .indexOf(index)));
+                                        }
+                                      } else {
+                                        if (!c.aioruser.contains("user")) {
+                                          c.aioruser.add("user");
+                                        }
+
+                                        if (c.userMessageIndexesObx
+                                            .contains(index)) {
+                                          return SenderMessageWidget(
+                                              availableWidth: availableWidth,
+                                              c: c,
+                                              message: c.userMessagesObx
+                                                  .elementAt(c
+                                                      .userMessageIndexesObx
+                                                      .indexOf(index)));
+                                        }
+                                      }
+                                      return null;
                                     }),
                               )
                             : Container(),

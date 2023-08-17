@@ -5,6 +5,7 @@ import 'package:chatdb/Sheets/sheets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../Chat/controller.dart';
 import '../Elements/checkinternet.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,6 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
+  final Controller c = Get.put(Controller());
   final CheckInternet p = Get.put(CheckInternet());
 
   int _selectedIndex = 1;
@@ -54,6 +56,9 @@ class HomePageState extends State<HomePage> {
               onPressed: () async {
                 if (_selectedIndex == 0) {
                   await p.checkUserConnection();
+                  if (c.userMessage.value == false) {
+                    c.userMessage.value = true;
+                  }
                 }
               },
               icon: Icon(
