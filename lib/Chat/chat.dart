@@ -25,6 +25,8 @@ class ChatFragmentState extends State<ChatFragment> {
     // ignore: unused_local_variable
     double availableHeight = mediaQueryData.size.height;
 
+    p.checkUserConnection();
+
     return Container(
       margin: const EdgeInsets.only(right: 16.0, left: 16.0, bottom: 8.0),
       decoration: const BoxDecoration(
@@ -42,20 +44,26 @@ class ChatFragmentState extends State<ChatFragment> {
                       padding: const EdgeInsets.only(right: 4.0),
                       child: ElevatedButton(
                         onPressed: () {
-                          _showPopup(context, availableWidth, availableHeight,
-                              c.sheetSelected, dbHelper);
+                          if (p.activeConnection.value) {
+                            _showPopup(context, availableWidth, availableHeight,
+                                c.sheetSelected, dbHelper, c);
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white.withOpacity(0.5),
                             foregroundColor: Colors.white.withOpacity(0.5),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12.0))),
-                        child: const Text(
-                          'Select sheet',
-                          maxLines: 1,
-                          style: TextStyle(
-                              color: Color.fromARGB(255, 43, 64, 62),
-                              fontFamily: 'Ubuntu'),
+                        child: Obx(
+                          () => Text(
+                            c.selectedFileName.value == ""
+                                ? 'Select sheet'
+                                : c.selectedFileName.value,
+                            maxLines: 1,
+                            style: const TextStyle(
+                                color: Color.fromARGB(255, 43, 64, 62),
+                                fontFamily: 'Ubuntu'),
+                          ),
                         ),
                       ),
                     )),
@@ -64,13 +72,17 @@ class ChatFragmentState extends State<ChatFragment> {
                   child: Container(
                     padding: const EdgeInsets.only(right: 16.0),
                     alignment: Alignment.centerRight,
-                    child: const Text(
-                      'Connected',
-                      textAlign: TextAlign.end,
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: 'Ubuntu',
-                          color: Color(0xffFFCFA3)),
+                    child: Obx(
+                      () => Text(
+                        p.activeConnection.value
+                            ? 'Connected'
+                            : 'Not Connected',
+                        textAlign: TextAlign.end,
+                        style: const TextStyle(
+                            fontSize: 16,
+                            fontFamily: 'Ubuntu',
+                            color: Color(0xffFFCFA3)),
+                      ),
                     ),
                   ),
                 ),
@@ -89,9 +101,45 @@ class ChatFragmentState extends State<ChatFragment> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Expanded(
-                      flex: 7,
-                      child: Container(),
+                    Obx(
+                      () => Expanded(
+                        flex: 7,
+                        child: c.submittedSheet.value != ""
+                            ? Container(
+                                alignment: Alignment.topCenter,
+                                child: ListView.builder(
+                                    itemCount: 2,
+                                    itemBuilder: (context, index) {
+                                      return Container(
+                                        alignment: Alignment.centerLeft,
+                                        margin:
+                                            const EdgeInsets.only(bottom: 8.0),
+                                        child: Container(
+                                            width: availableWidth / 1.3,
+                                            decoration: const BoxDecoration(
+                                              borderRadius: BorderRadius.only(
+                                                  topRight:
+                                                      Radius.circular(12.0),
+                                                  bottomLeft:
+                                                      Radius.circular(12.0),
+                                                  bottomRight:
+                                                      Radius.circular(12.0)),
+                                              color: Color(0xff034B40),
+                                            ),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8.0, vertical: 8.0),
+                                            child: Text(
+                                              c.aiMessages.elementAt(index),
+                                              style: const TextStyle(
+                                                  fontFamily: 'Ubuntu',
+                                                  fontSize: 14,
+                                                  color: Colors.white),
+                                            )),
+                                      );
+                                    }),
+                              )
+                            : Container(),
+                      ),
                     ),
                     Container(
                       margin: const EdgeInsets.only(bottom: 10.0),
@@ -133,11 +181,16 @@ class ChatFragmentState extends State<ChatFragment> {
                                     borderSide: BorderSide(
                                         color: Colors.grey, width: 2.0),
                                   ),
-                                  fillColor: c.userMessage.value
-                                      ? Colors.white.withOpacity(0.5)
-                                      : Colors.grey.withOpacity(0.2),
+                                  fillColor: p.activeConnection.value
+                                      ? (c.userMessage.value
+                                          ? Colors.white.withOpacity(0.5)
+                                          : Colors.grey.withOpacity(0.2))
+                                      : const Color.fromARGB(255, 125, 125, 125)
+                                          .withOpacity(1),
                                   filled: true,
-                                  enabled: c.userMessage.value,
+                                  enabled: p.activeConnection.value
+                                      ? c.userMessage.value
+                                      : false,
                                 ),
                               ),
                             ),
@@ -145,41 +198,46 @@ class ChatFragmentState extends State<ChatFragment> {
                         ),
                         Expanded(
                           flex: 2,
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              await p.checkUserConnection();
-                              if (p.activeConnection.value) {
-                                if (c.userMessage.value == false) {
-                                  c.userMessage.value = true;
-                                }
-                                String message = textEditingController.text;
-                                if (message.isNotEmpty) {
-                                  c.userMessagesObx.add(message);
-                                  if (c.messageCount.value == 1) {
-                                    c.userMessageIndexesObx.removeAt(0);
-                                    c.userMessagesObx.removeAt(0);
+                          child: Obx(
+                            () => ElevatedButton(
+                              onPressed: () async {
+                                await p.checkUserConnection();
+                                if (p.activeConnection.value) {
+                                  if (c.userMessage.value == false) {
+                                    c.userMessage.value = true;
                                   }
-                                  c.messageCount.value += 1;
-                                  c.userMessageIndexesObx
-                                      .add(c.messageCount.value - 1);
-                                  textEditingController.clear();
+                                  String message = textEditingController.text;
+                                  if (message.isNotEmpty) {
+                                    c.userMessagesObx.add(message);
+                                    if (c.messageCount.value == 1) {
+                                      c.userMessageIndexesObx.removeAt(0);
+                                      c.userMessagesObx.removeAt(0);
+                                    }
+                                    c.messageCount.value += 1;
+                                    c.userMessageIndexesObx
+                                        .add(c.messageCount.value - 1);
+                                    textEditingController.clear();
+                                    c.userMessage.value = false;
+                                    c.processUsertoAI(message);
+                                    c.aioruser.add("user");
+                                  }
+                                } else {
                                   c.userMessage.value = false;
-                                  c.processUsertoAI(message);
-                                  c.aioruser.add("user");
                                 }
-                              } else {
-                                c.userMessage.value = false;
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8.0)),
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 19.0),
-                                backgroundColor: const Color(0xff034B40)),
-                            child: const Icon(
-                              Icons.send,
-                              color: Colors.white,
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8.0)),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 19.0),
+                                  backgroundColor: p.activeConnection.value
+                                      ? const Color(0xff034B40)
+                                      : const Color.fromARGB(
+                                          255, 119, 119, 119)),
+                              child: const Icon(
+                                Icons.send,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         )
@@ -195,7 +253,7 @@ class ChatFragmentState extends State<ChatFragment> {
 }
 
 void _showPopup(BuildContext context, var availableWidth, var availableHeight,
-    RxInt sheetSelected, DatabaseHelper dbHelper) {
+    RxInt sheetSelected, DatabaseHelper dbHelper, Controller c) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -228,52 +286,55 @@ void _showPopup(BuildContext context, var availableWidth, var availableHeight,
                               return Container(
                                 alignment: Alignment.center,
                                 margin: const EdgeInsets.only(bottom: 8.0),
-                                child: ElevatedButton(
-                                  onPressed: () {},
-                                  style: ElevatedButton.styleFrom(
-                                    foregroundColor: Colors.white,
-                                    padding: const EdgeInsets.only(
-                                        left: 16.0, right: 0),
-                                    backgroundColor: const Color(0xff034B40),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(12.0)),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        flex: 2,
-                                        child: Text(
-                                          contacts[index]['excelSheetName'],
-                                          style: const TextStyle(
-                                              overflow: TextOverflow.ellipsis,
-                                              fontFamily: 'Ubuntu',
-                                              color: Color.fromARGB(
-                                                  255, 255, 218, 184),
-                                              fontSize: 14.0),
+                                padding: const EdgeInsets.only(left: 16.0),
+                                decoration: BoxDecoration(
+                                    color: const Color(0xff034B40),
+                                    borderRadius: BorderRadius.circular(12.0)),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 2,
+                                      child: Text(
+                                        contacts[index]['excelSheetName'],
+                                        style: const TextStyle(
+                                            overflow: TextOverflow.ellipsis,
+                                            fontFamily: 'Ubuntu',
+                                            color: Color.fromARGB(
+                                                255, 255, 218, 184),
+                                            fontSize: 14.0),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: Obx(
+                                        () => Radio<int>(
+                                          toggleable: true,
+                                          fillColor:
+                                              MaterialStateProperty.all<Color?>(
+                                                  const Color.fromARGB(
+                                                      255, 225, 197, 139)),
+                                          value: index,
+                                          groupValue: sheetSelected.value,
+                                          onChanged: (int? val) {
+                                            if (val == null) {
+                                              sheetSelected.value = -1;
+                                              c.selectedFilePath.value = "";
+                                              c.selectedFileName.value = "";
+                                            } else {
+                                              int num = val;
+                                              c.selectedFilePath.value =
+                                                  contacts[num]
+                                                      ['excelFilePath'];
+                                              c.selectedFileName.value =
+                                                  contacts[num]
+                                                      ['excelSheetName'];
+                                              sheetSelected.value = val;
+                                            }
+                                          },
                                         ),
                                       ),
-                                      Expanded(
-                                        flex: 1,
-                                        child: Obx(
-                                          () => Radio<int>(
-                                              fillColor: MaterialStateProperty
-                                                  .all<Color?>(
-                                                      const Color.fromARGB(
-                                                          255, 225, 197, 139)),
-                                              value: sheetSelected.value,
-                                              groupValue: 1,
-                                              onChanged: (int? val) {
-                                                if (val == 0) {
-                                                  sheetSelected.value = 1;
-                                                } else {
-                                                  sheetSelected.value = 0;
-                                                }
-                                              }),
-                                        ),
-                                      )
-                                    ],
-                                  ),
+                                    )
+                                  ],
                                 ),
                               );
                             },
@@ -296,26 +357,18 @@ void _showPopup(BuildContext context, var availableWidth, var availableHeight,
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8.0),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black
-                                    .withOpacity(0.05), // Shadow color
-                                spreadRadius:
-                                    3, // How far the shadow extends from the object
-                                blurRadius: 2, // The radius of the shadow blur
-                                offset: const Offset(0,
-                                    3), // The offset of the shadow from the object
-                              ),
-                            ],
                           ),
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
+                                shadowColor: Colors.black,
                                 foregroundColor: Colors.white,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8.0))),
                             onPressed: () {
-                              sheetSelected.value = 0;
-                              // Perform submit action
+                              if (c.sheetSelected.value == -1) {
+                                c.selectedFileName.value = "";
+                                c.selectedFilePath.value = "";
+                              }
                               Navigator.of(context).pop();
                             },
                             child: const Text(
@@ -336,24 +389,34 @@ void _showPopup(BuildContext context, var availableWidth, var availableHeight,
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8.0),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black
-                                    .withOpacity(0.05), // Shadow color
-                                spreadRadius:
-                                    3, // How far the shadow extends from the object
-                                blurRadius: 2, // The radius of the shadow blur
-                                offset: const Offset(0,
-                                    3), // The offset of the shadow from the object
-                              ),
-                            ],
                           ),
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
+                                shadowColor: Colors.black,
                                 foregroundColor: Colors.white,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8.0))),
-                            onPressed: () {},
+                            onPressed: () {
+                              if (c.sheetSelected.value == -1) {
+                                c.selectedFileName.value = "";
+                                c.selectedFilePath.value = "";
+                                c.submittedSheet.value = "";
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
+                                  content: Text("No sheet selected"),
+                                ));
+
+                                Navigator.of(context).pop();
+                              } else {
+                                c.submittedSheet.value =
+                                    c.selectedFileName.value;
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
+                                  content: Text("Sheet selected"),
+                                ));
+                                Navigator.of(context).pop();
+                              }
+                            },
                             child: const Text('Submit',
                                 style: TextStyle(
                                     fontSize: 14,

@@ -63,21 +63,37 @@ class HomeFragmentState extends State<HomeFragment> {
                         child: Hero(
                           tag: 'avatarTag',
                           child: Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black
-                                      .withOpacity(0.08), // Shadow color
-                                  spreadRadius:
-                                      5, // How far the shadow extends from the object
-                                  blurRadius:
-                                      4, // The radius of the shadow blur
-                                  offset: const Offset(0,
-                                      4), // The offset of the shadow from the object
-                                ),
-                              ],
-                            ),
+                            decoration: user?.email! == null
+                                ? BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black
+                                            .withOpacity(0.05), // Shadow color
+                                        spreadRadius:
+                                            5, // How far the shadow extends from the object
+                                        blurRadius:
+                                            4, // The radius of the shadow blur
+                                        offset: const Offset(0,
+                                            4), // The offset of the shadow from the object
+                                      ),
+                                    ],
+                                  )
+                                : BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black
+                                            .withOpacity(0.02), // Shadow color
+                                        spreadRadius:
+                                            5, // How far the shadow extends from the object
+                                        blurRadius:
+                                            4, // The radius of the shadow blur
+                                        offset: const Offset(0,
+                                            4), // The offset of the shadow from the object
+                                      ),
+                                    ],
+                                  ),
                             child: user?.email! == null
                                 ? const CircleAvatar(
                                     backgroundColor: Colors.white,
@@ -118,10 +134,22 @@ class HomeFragmentState extends State<HomeFragment> {
         Expanded(
           flex: 7,
           child: Container(
+            alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
             margin: const EdgeInsets.only(bottom: 8.0),
             child: Container(
               decoration: BoxDecoration(
+                  // decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05), // Shadow color
+                      spreadRadius:
+                          3, // How far the shadow extends from the object
+                      blurRadius: 2, // The radius of the shadow blur
+                      offset: const Offset(
+                          0, 3), // The offset of the shadow from the object
+                    ),
+                  ],
                   color: const Color(0xff034B40),
                   borderRadius: BorderRadius.circular(16.0)),
               child: Column(children: [

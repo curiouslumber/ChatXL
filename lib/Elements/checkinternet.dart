@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 
 class CheckInternet extends GetxController {
   var activeConnection = false.obs;
+  var cloudSave = false.obs;
+
   String T = "";
   Future checkUserConnection() async {
     try {

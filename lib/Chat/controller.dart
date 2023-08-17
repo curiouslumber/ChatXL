@@ -13,10 +13,15 @@ class Controller extends GetxController {
   var aiMessage = false.obs;
   var userMessage = true.obs;
   var signedIn = false.obs;
-  var sheetSelected = 0.obs;
+  var sheetSelected = (-1).obs;
+
+  var selectedFileName = "".obs;
+  var selectedFilePath = "".obs;
+  var submittedSheet = "".obs;
 
   var aiMessages = [
-    "Hey there! I'm you AI assistant Lisa from ChatDB. Ready to perform some database operations?"
+    "Sheet uploaded successfully",
+    "Hey there! I'm your AI assistant Lisa from ChatDB. Ready to perform some database operations?"
   ].obs;
   RxList<int> aiMessageIndexesObx = [1].obs;
 

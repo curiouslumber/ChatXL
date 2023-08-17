@@ -3,6 +3,9 @@ import 'package:chatdb/Elements/sidebar.dart';
 import 'package:chatdb/Home/home.dart';
 import 'package:chatdb/Sheets/sheets.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../Elements/checkinternet.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,6 +15,8 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
+  final CheckInternet p = Get.put(CheckInternet());
+
   int _selectedIndex = 1;
   var fragments = [
     const ChatFragment(),
@@ -45,8 +50,19 @@ class HomePageState extends State<HomePage> {
         actions: [
           Container(
             margin: const EdgeInsets.only(right: 12.0),
-            child: const Icon(
-              Icons.settings,
+            child: IconButton(
+              onPressed: () async {
+                if (_selectedIndex == 0) {
+                  await p.checkUserConnection();
+                }
+              },
+              icon: Icon(
+                _selectedIndex == 0
+                    ? Icons.refresh
+                    : (_selectedIndex == 1
+                        ? Icons.settings
+                        : (p.cloudSave.value ? Icons.cloud : Icons.cloud_off)),
+              ),
             ),
           )
         ],
