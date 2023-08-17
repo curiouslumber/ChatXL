@@ -46,7 +46,7 @@ class FullScreenAvatarPageState extends State<FullScreenAvatarPage> {
               alignment: Alignment.center,
               color: const Color(0xff405C5A),
               padding: const EdgeInsets.symmetric(horizontal: 32.0),
-              child: !c.signedIn.value
+              child: (!c.signedIn.value && user?.email == null)
                   ? Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -86,7 +86,7 @@ class FullScreenAvatarPageState extends State<FullScreenAvatarPage> {
                                       : CircleAvatar(
                                           backgroundImage:
                                               NetworkImage(user!.photoURL!),
-                                          radius: 20,
+                                          radius: 80,
                                         ),
                                 ),
                               ),
