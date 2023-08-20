@@ -132,7 +132,7 @@ class ChatFragmentState extends State<ChatFragment> {
                                         return AIMessageWidget(
                                           availableWidth: availableWidth,
                                           c: c,
-                                          message: c.aiMessages.elementAt(0),
+                                          message: c.aiMessagesFromAPI.elementAt(index~/2),
                                         );
                                       } else if (index != 0 &&
                                           index != 1 &&

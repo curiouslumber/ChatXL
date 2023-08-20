@@ -23,6 +23,7 @@ class Controller extends GetxController {
 
   var aiMessages = ["Sheet uploaded successfully."].obs;
   RxList<int> aiMessageIndexesObx = [1].obs;
+  var aiMessagesFromAPI = ["", "Hi there!"].obs;
 
   processUsertoAI(String userText) {
     Timer(const Duration(seconds: 3), () {
