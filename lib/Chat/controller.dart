@@ -21,9 +21,7 @@ class Controller extends GetxController {
   var selectedFilePath = "".obs;
   var submittedSheet = "".obs;
 
-  var aiMessages = [
-    "Sheet uploaded successfully\n\nHey there! I'm your AI assistant Lisa from ChatDB. Ready to perform some database operations?"
-  ].obs;
+  var aiMessages = ["Sheet uploaded successfully."].obs;
   RxList<int> aiMessageIndexesObx = [1].obs;
 
   processUsertoAI(String userText) {
