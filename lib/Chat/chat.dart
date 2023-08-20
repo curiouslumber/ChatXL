@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:chatdb/Chat/message_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart';
 import '../Database/databasehelper.dart';
 import '../Elements/checkinternet.dart';
 import 'controller.dart';
@@ -29,6 +32,39 @@ class ChatFragmentState extends State<ChatFragment> {
     double availableHeight = mediaQueryData.size.height;
 
     p.checkUserConnection();
+
+    const url = "http://192.168.1.34:5005/webhooks/rest/webhook";
+
+    Future<String> postData(String message) async {
+      try {
+        final response = await post(Uri.parse(url),
+
+            headers: {'Content-Type': 'application/json'},
+            body: json.encode({"message": message})
+        );
+        return response.body;
+      } catch (er) {
+        print(er);
+        return "";
+      }
+    }
+
+    String processData(String jsonStr) {
+      try {
+        final List<dynamic> jsonList = json.decode(jsonStr);
+
+        // Extract the "text" values from each JSON object
+        final List<String> textValues = jsonList.map((jsonObject) {
+          return jsonObject['text'] as String;
+        }).toList();
+
+        // Return the extracted "text" values as a single string
+        return textValues.join('\n'); // or any delimiter you prefer
+      } catch (e) {
+        print('Error: $e');
+        return ''; // Return an empty string or some default value in case of an error
+      }
+    }
 
     return Container(
       margin: const EdgeInsets.only(right: 16.0, left: 16.0, bottom: 8.0),
@@ -132,7 +168,8 @@ class ChatFragmentState extends State<ChatFragment> {
                                         return AIMessageWidget(
                                           availableWidth: availableWidth,
                                           c: c,
-                                          message: c.aiMessagesFromAPI.elementAt(index~/2),
+                                          message: c.aiMessagesFromAPI
+                                              .elementAt(index ~/ 2),
                                         );
                                       } else if (index != 0 &&
                                           index != 1 &&
@@ -253,6 +290,18 @@ class ChatFragmentState extends State<ChatFragment> {
                                   }
                                   String message = textEditingController.text;
                                   if (message.isNotEmpty) {
+
+                                    String jsonStr = await postData(message);
+                                    String res = processData(jsonStr);
+
+                                    if(res == "")
+                                    {
+                                      res = "Cannot process request";
+                                    }
+
+                                    c.aiMessagesFromAPI.add(res);
+
+
                                     c.userMessagesObx.add(message);
                                     if (c.messageCount.value == 1) {
                                       c.userMessageIndexesObx.removeAt(0);
@@ -368,14 +417,16 @@ void _showPopup(BuildContext context, var availableWidth, var availableHeight,
                                               sheetSelected.value = -1;
                                               c.selectedFilePath.value = "";
                                               c.selectedFileName.value = "";
+                                              c.aiMessagesFromAPI.clear();
                                             } else {
                                               int num = val;
-                                              c.selectedFilePath.value =
-                                                  contacts[num]
-                                                      ['excelFilePath'];
-                                              c.selectedFileName.value =
-                                                  contacts[num]
-                                                      ['excelSheetName'];
+
+                                              c.tempSelectedFilePath.value = contacts[num]
+                                              ['excelFilePath'];
+                                              c.tempSelectedFileName.value =
+                                              contacts[num]
+                                              ['excelSheetName'];
+
                                               sheetSelected.value = val;
                                             }
                                           },
@@ -457,6 +508,21 @@ void _showPopup(BuildContext context, var availableWidth, var availableHeight,
 
                                 Navigator.of(context).pop();
                               } else {
+
+
+                                c.selectedFilePath.value = c.tempSelectedFilePath.value;
+                                c.selectedFileName.value = c.tempSelectedFileName.value;
+
+                                c.messageCount.value = 1;
+                                c.userMessagesObx.clear();
+                                c.userMessagesObx.add("");
+                                c.userMessageIndexesObx.clear();
+                                c.userMessageIndexesObx.add(1);
+                                c.aioruser.clear();
+                                c.aioruser.add("");
+                                c.aiMessagesFromAPI.clear();
+                                c.aiMessagesFromAPI.add("");
+
                                 c.submittedSheet.value =
                                     c.selectedFileName.value;
                                 ScaffoldMessenger.of(context)

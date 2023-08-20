@@ -12,18 +12,19 @@ class Controller extends GetxController {
   var fileImported = false.obs;
   var filePath = "".obs;
 
-  var aiMessage = false.obs;
   var userMessage = true.obs;
   var signedIn = false.obs;
   var sheetSelected = (-1).obs;
+
+  var tempSelectedFilePath = "".obs;
+  var tempSelectedFileName = "".obs;
 
   var selectedFileName = "".obs;
   var selectedFilePath = "".obs;
   var submittedSheet = "".obs;
 
   var aiMessages = ["Sheet uploaded successfully."].obs;
-  RxList<int> aiMessageIndexesObx = [1].obs;
-  var aiMessagesFromAPI = ["", "Hi there!"].obs;
+  var aiMessagesFromAPI = [].obs;
 
   processUsertoAI(String userText) {
     Timer(const Duration(seconds: 3), () {
