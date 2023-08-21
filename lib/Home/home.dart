@@ -96,7 +96,7 @@ class HomeFragmentState extends State<HomeFragment> {
                                       ),
                                     ],
                                   ),
-                            child: user?.email! == null
+                            child: user?.photoURL == null
                                 ? const CircleAvatar(
                                     backgroundColor: Colors.white,
                                     radius: 50,

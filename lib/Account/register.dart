@@ -1,9 +1,20 @@
+import 'package:chatdb/Elements/checkinternet.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../Chat/controller.dart';
 
 class RegisterPage extends StatelessWidget {
   RegisterPage({super.key});
 
-  final TextEditingController textEditingController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  final Controller c = Get.put(Controller());
+  final FirebaseAuth firebase = FirebaseAuth.instance;
+  final CheckInternet p = Get.put(CheckInternet());
 
   @override
   Widget build(BuildContext context) {
@@ -12,6 +23,10 @@ class RegisterPage extends StatelessWidget {
     double availableWidth = mediaQueryData.size.width;
     // ignore: unused_local_variable
     double availableHeight = mediaQueryData.size.height;
+
+    if (c.isVisible.value == true) {
+      c.isVisible.value = false;
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -71,14 +86,14 @@ class RegisterPage extends StatelessWidget {
                   height: availableHeight / 12,
                   child: TextField(
                     textAlignVertical: TextAlignVertical.bottom,
-                    controller: textEditingController,
+                    controller: usernameController,
                     style: const TextStyle(
                         fontSize: 18,
                         color: Color(0xff034B40),
                         fontFamily: 'Ubuntu'),
                     cursorColor: const Color(0xff034B40),
                     decoration: InputDecoration(
-                      hintText: 'First Name',
+                      hintText: 'Username',
                       hintStyle: const TextStyle(
                           color: Color.fromARGB(255, 4, 60, 52)),
                       enabledBorder: OutlineInputBorder(
@@ -121,7 +136,7 @@ class RegisterPage extends StatelessWidget {
                   height: availableHeight / 12,
                   child: TextField(
                     textAlignVertical: TextAlignVertical.bottom,
-                    controller: textEditingController,
+                    controller: emailController,
                     style: const TextStyle(
                         fontSize: 18,
                         color: Color(0xff034B40),
@@ -169,36 +184,57 @@ class RegisterPage extends StatelessWidget {
                     ],
                   ),
                   height: availableHeight / 12,
-                  child: TextField(
-                    textAlignVertical: TextAlignVertical.bottom,
-                    controller: textEditingController,
-                    style: const TextStyle(
-                        fontSize: 18,
-                        color: Color(0xff034B40),
-                        fontFamily: 'Ubuntu'),
-                    cursorColor: const Color(0xff034B40),
-                    decoration: InputDecoration(
-                      hintText: 'Password',
-                      hintStyle: const TextStyle(
-                          color: Color.fromARGB(255, 4, 60, 52)),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(12.0)),
-                        borderSide: BorderSide(
-                            color: Colors.white.withOpacity(0.2), width: 0.0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(12.0)),
-                        borderSide: BorderSide(
-                            color: Colors.white.withOpacity(0.2), width: 0.0),
-                      ),
-                      disabledBorder: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                        borderSide: BorderSide(color: Colors.grey, width: 2.0),
-                      ),
-                      fillColor: const Color(0xffD9D9D9),
-                      filled: true,
+                  child: Obx(
+                    () => TextField(
+                      obscureText: !c.isVisible.value ? true : false,
+                      textAlignVertical: TextAlignVertical.bottom,
+                      controller: passwordController,
+                      style: const TextStyle(
+                          fontSize: 18,
+                          color: Color(0xff034B40),
+                          fontFamily: 'Ubuntu'),
+                      cursorColor: const Color(0xff034B40),
+                      decoration: InputDecoration(
+                          hintText: 'Password',
+                          hintStyle: const TextStyle(
+                              color: Color.fromARGB(255, 4, 60, 52)),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(12.0)),
+                            borderSide: BorderSide(
+                                color: Colors.white.withOpacity(0.2),
+                                width: 0.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(12.0)),
+                            borderSide: BorderSide(
+                                color: Colors.white.withOpacity(0.2),
+                                width: 0.0),
+                          ),
+                          disabledBorder: const OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(12.0)),
+                            borderSide:
+                                BorderSide(color: Colors.grey, width: 2.0),
+                          ),
+                          fillColor: const Color(0xffD9D9D9),
+                          filled: true,
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              !c.isVisible.value
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: const Color(0xff405C5A),
+                            ),
+                            onPressed: () {
+                              if (c.isVisible.value == false) {
+                                c.isVisible.value = true;
+                              } else {
+                                c.isVisible.value = false;
+                              }
+                            },
+                          )),
                     ),
                   ),
                 ),
@@ -228,7 +264,89 @@ class RegisterPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () async {
+                      var userName = "";
+                      var userEmail = "";
+                      var userPassword = "";
+
+                      userName = usernameController.text.trim();
+                      userEmail = emailController.text.trim();
+                      userPassword = passwordController.text.trim();
+
+                      await p.checkUserConnection();
+
+                      if (p.activeConnection.value) {
+                        if (userEmail.isEmail) {
+                          var signInMethod = await firebase
+                              .fetchSignInMethodsForEmail(userEmail);
+
+                          if (signInMethod.isNotEmpty) {
+                            // ignore: use_build_context_synchronously
+                            var signInString = "Google Sign In";
+
+                            if (signInMethod.first != "google.com") {
+                              signInString = "User Sign In";
+                            }
+                            // ignore: use_build_context_synchronously
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content:
+                                  Text("User already exists via $signInString"),
+                            ));
+                          } else if (userName == "" ||
+                              userEmail == "" ||
+                              userPassword == "") {
+                            // ignore: use_build_context_synchronously
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text("Missing fields"),
+                            ));
+                          } else if (userPassword.length < 6) {
+                            // ignore: use_build_context_synchronously
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text(
+                                  "Password should be atleast 6 characters"),
+                            ));
+                          } else if ((userName != "" &&
+                              userEmail != "" &&
+                              userPassword != "" &&
+                              userPassword.length >= 6)) {
+                            await firebase
+                                .createUserWithEmailAndPassword(
+                                    email: userEmail, password: userPassword)
+                                .then((value) => {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                        content:
+                                            Text("Registration successful"),
+                                      )),
+                                    });
+
+                            await firebase.signOut();
+                            // ignore: use_build_context_synchronously
+                            Navigator.pop(context);
+                          } else {
+                            // ignore: use_build_context_synchronously
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text("Error"),
+                            ));
+                          }
+                        } else {
+                          // ignore: use_build_context_synchronously
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text("Invalid Email address"),
+                          ));
+                        }
+                      } else {
+                        // ignore: use_build_context_synchronously
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text("No internet connection"),
+                        ));
+                      }
+                    },
                     child: const Text(
                       'Register',
                       style: TextStyle(
