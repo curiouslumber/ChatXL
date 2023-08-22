@@ -1,9 +1,17 @@
+import 'package:chatdb/Account/email_sent.dart';
+import 'package:chatdb/Chat/controller.dart';
+import 'package:chatdb/Elements/checkinternet.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class SignInPage extends StatelessWidget {
   SignInPage({super.key});
 
-  final TextEditingController textEditingController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final Controller c = Get.put(Controller());
+  final CheckInternet p = Get.put(CheckInternet());
 
   @override
   Widget build(BuildContext context) {
@@ -13,6 +21,10 @@ class SignInPage extends StatelessWidget {
     double availableWidth = mediaQueryData.size.width;
     // ignore: unused_local_variable
     double availableHeight = mediaQueryData.size.height;
+
+    if (c.isVisible.value) {
+      c.isVisible.value = false;
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -58,7 +70,7 @@ class SignInPage extends StatelessWidget {
                 height: availableHeight / 10,
                 child: TextField(
                   textAlignVertical: TextAlignVertical.bottom,
-                  controller: textEditingController,
+                  controller: emailController,
                   style: const TextStyle(
                       fontSize: 18,
                       color: Color(0xff034B40),
@@ -106,36 +118,54 @@ class SignInPage extends StatelessWidget {
                   ],
                 ),
                 height: availableHeight / 10,
-                child: TextField(
-                  textAlignVertical: TextAlignVertical.bottom,
-                  controller: textEditingController,
-                  style: const TextStyle(
-                      fontSize: 18,
-                      color: Color(0xff034B40),
-                      fontFamily: 'Ubuntu'),
-                  cursorColor: const Color(0xff034B40),
-                  decoration: InputDecoration(
-                    hintText: 'Password',
-                    hintStyle:
-                        const TextStyle(color: Color.fromARGB(255, 4, 60, 52)),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(12.0)),
-                      borderSide: BorderSide(
-                          color: Colors.white.withOpacity(0.2), width: 0.0),
+                child: Obx(
+                  () => TextField(
+                    textAlignVertical: TextAlignVertical.bottom,
+                    controller: passwordController,
+                    style: const TextStyle(
+                        fontSize: 18,
+                        color: Color(0xff034B40),
+                        fontFamily: 'Ubuntu'),
+                    cursorColor: const Color(0xff034B40),
+                    obscureText: !c.isVisible.value ? true : false,
+                    decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          c.isVisible.value
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          color: const Color(0xff405C5A),
+                        ),
+                        onPressed: () {
+                          if (c.isVisible.value) {
+                            c.isVisible.value = false;
+                          } else {
+                            c.isVisible.value = true;
+                          }
+                        },
+                      ),
+                      hintText: 'Password',
+                      hintStyle: const TextStyle(
+                          color: Color.fromARGB(255, 4, 60, 52)),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(12.0)),
+                        borderSide: BorderSide(
+                            color: Colors.white.withOpacity(0.2), width: 0.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(12.0)),
+                        borderSide: BorderSide(
+                            color: Colors.white.withOpacity(0.2), width: 0.0),
+                      ),
+                      disabledBorder: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                        borderSide: BorderSide(color: Colors.grey, width: 2.0),
+                      ),
+                      fillColor: const Color(0xffD9D9D9),
+                      filled: true,
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(12.0)),
-                      borderSide: BorderSide(
-                          color: Colors.white.withOpacity(0.2), width: 0.0),
-                    ),
-                    disabledBorder: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                      borderSide: BorderSide(color: Colors.grey, width: 2.0),
-                    ),
-                    fillColor: const Color(0xffD9D9D9),
-                    filled: true,
                   ),
                 ),
               ),
@@ -159,6 +189,7 @@ class SignInPage extends StatelessWidget {
                 height: availableHeight / 12,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
+                    foregroundColor: const Color(0xff405C5A),
                     elevation: 0,
                     padding: const EdgeInsets.symmetric(horizontal: 32.0),
                     backgroundColor: const Color(0xffD9D9D9),
@@ -166,7 +197,65 @@ class SignInPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12.0),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () async {
+                    var userEmail = emailController.text.trim();
+                    var userPassword = passwordController.text.trim();
+
+                    await p.checkUserConnection();
+
+                    if (p.activeConnection.value) {
+                      if (userEmail != "" && userPassword != "") {
+                        if (userEmail.isEmail) {
+                          var signInMethod = await FirebaseAuth.instance
+                              .fetchSignInMethodsForEmail(userEmail);
+                          if (signInMethod.isNotEmpty) {
+                            try {
+                              await FirebaseAuth.instance
+                                  .signInWithEmailAndPassword(
+                                      email: userEmail, password: userPassword);
+                            } catch (error) {
+                              if (error.hashCode == 177945033) {
+                                // ignore: use_build_context_synchronously
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
+                                  content: Text("User not found"),
+                                ));
+                              } else if (error.hashCode == 261406832) {
+                                // ignore: use_build_context_synchronously
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
+                                  content: Text("Wrong Password"),
+                                ));
+                              }
+                            }
+                          } else {
+                            // ignore: use_build_context_synchronously
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text("Email not registered"),
+                            ));
+                          }
+                        } else {
+                          // ignore: use_build_context_synchronously
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text("Invalid Email address"),
+                          ));
+                        }
+                      } else {
+                        // ignore: use_build_context_synchronously
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text("Missing Fields"),
+                        ));
+                      }
+                    } else {
+                      // ignore: use_build_context_synchronously
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("No internet connection"),
+                      ));
+                    }
+                  },
                   child: const Text(
                     'Sign In',
                     style: TextStyle(
@@ -176,6 +265,80 @@ class SignInPage extends StatelessWidget {
                     ),
                   ),
                 ),
+              ),
+              Container(
+                height: availableHeight / 40,
+              ),
+              Container(
+                height: availableHeight / 12,
+                alignment: Alignment.center,
+                // color: Colors.white,
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: const Color(0xff405C5A),
+                      elevation: 0,
+                      padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                      backgroundColor: const Color(0xffD9D9D9),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                    ),
+                    onPressed: () async {
+                      var userEmail = emailController.text.trim();
+
+                      await p.checkUserConnection();
+
+                      if (p.activeConnection.value) {
+                        if (userEmail != "") {
+                          if (userEmail.isEmail) {
+                            var signInMethod = await FirebaseAuth.instance
+                                .fetchSignInMethodsForEmail(userEmail);
+                            if (signInMethod.isNotEmpty) {
+                              // await FirebaseAuth.instance.signInWithEmailLink(
+                              //     email: userEmail, emailLink: );
+
+                              Get.to(() => const EmailLinkPage());
+                            } else {
+                              // ignore: use_build_context_synchronously
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                content: Text("Email not registered"),
+                              ));
+                            }
+                          } else {
+                            // ignore: use_build_context_synchronously
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text("Invalid Email"),
+                            ));
+                          }
+                        } else {
+                          // ignore: use_build_context_synchronously
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text("Email Field missing"),
+                          ));
+                        }
+                      } else {
+                        // ignore: use_build_context_synchronously
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text("No connection"),
+                        ));
+                      }
+                    },
+                    child: const Text(
+                      'Sign In Via Email Link',
+                      maxLines: 1,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontFamily: 'Ubuntu',
+                        color: Color(0xff034B40),
+                      ),
+                    )),
+              ),
+              Container(
+                height: availableHeight / 40,
               ),
             ],
           ),

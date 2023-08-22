@@ -25,6 +25,10 @@ class MyApp extends StatelessWidget {
             Color.fromARGB(255, 195, 204, 202), // Set your desired color here
       ),
     );
-    return const GetMaterialApp(home: HomePage());
+    return GetMaterialApp(
+        theme: ThemeData(
+          primaryColor: const Color(0xff405C5A),
+        ),
+        home: const HomePage());
   }
 }
