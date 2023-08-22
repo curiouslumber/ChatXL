@@ -3,6 +3,9 @@ import 'dart:async';
 import 'package:get/get.dart';
 
 class Controller extends GetxController {
+  // Homepage variables
+  var displayName = "".obs;
+
   // Register page variables
   var isVisible = false.obs;
 

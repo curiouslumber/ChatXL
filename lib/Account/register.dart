@@ -1,5 +1,5 @@
 import 'package:chatdb/Elements/checkinternet.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:chatdb/Home/accounthandler.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -277,76 +277,11 @@ class RegisterPage extends StatelessWidget {
                       await p.checkUserConnection();
 
                       if (p.activeConnection.value) {
-                        if (userEmail.isEmail) {
-                          var signInMethod = await firebase
-                              .fetchSignInMethodsForEmail(userEmail);
+                        AccountHandler handler = AccountHandler();
 
-                          if (signInMethod.isNotEmpty) {
-                            // ignore: use_build_context_synchronously
-                            var signInString = "Google Sign In";
-
-                            if (signInMethod.first != "google.com") {
-                              signInString = "User Sign In";
-                            }
-                            // ignore: use_build_context_synchronously
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content:
-                                  Text("User already exists via $signInString"),
-                            ));
-                          } else if (userName == "" ||
-                              userEmail == "" ||
-                              userPassword == "") {
-                            // ignore: use_build_context_synchronously
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content: Text("Missing fields"),
-                            ));
-                          } else if (userPassword.length < 6) {
-                            // ignore: use_build_context_synchronously
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content: Text(
-                                  "Password should be atleast 6 characters"),
-                            ));
-                          } else if ((userName != "" &&
-                              userEmail != "" &&
-                              userPassword != "" &&
-                              userPassword.length >= 6)) {
-                            await firebase
-                                .createUserWithEmailAndPassword(
-                                    email: userEmail, password: userPassword)
-                                .then((value) => {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(const SnackBar(
-                                        content:
-                                            Text("Registration successful"),
-                                      )),
-                                    });
-                            FirebaseFirestore.instance
-                                .collection("users")
-                                .doc()
-                                .set({
-                              "userName": userName,
-                              "userEmail": userEmail,
-                              "createdAt": DateTime.now()
-                            });
-                            await firebase.signOut();
-                            // ignore: use_build_context_synchronously
-                            Navigator.pop(context);
-                          } else {
-                            // ignore: use_build_context_synchronously
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content: Text("Error"),
-                            ));
-                          }
-                        } else {
-                          // ignore: use_build_context_synchronously
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                            content: Text("Invalid Email address"),
-                          ));
-                        }
+                        // ignore: use_build_context_synchronously
+                        handler.registerHandler(context, firebase, userName,
+                            userEmail, userPassword);
                       } else {
                         // ignore: use_build_context_synchronously
                         ScaffoldMessenger.of(context)

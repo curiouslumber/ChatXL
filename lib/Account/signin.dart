@@ -1,6 +1,6 @@
-import 'package:chatdb/Account/email_sent.dart';
 import 'package:chatdb/Chat/controller.dart';
 import 'package:chatdb/Elements/checkinternet.dart';
+import 'package:chatdb/Home/accounthandler.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -204,51 +204,9 @@ class SignInPage extends StatelessWidget {
                     await p.checkUserConnection();
 
                     if (p.activeConnection.value) {
-                      if (userEmail != "" && userPassword != "") {
-                        if (userEmail.isEmail) {
-                          var signInMethod = await FirebaseAuth.instance
-                              .fetchSignInMethodsForEmail(userEmail);
-                          if (signInMethod.isNotEmpty) {
-                            try {
-                              await FirebaseAuth.instance
-                                  .signInWithEmailAndPassword(
-                                      email: userEmail, password: userPassword);
-                            } catch (error) {
-                              if (error.hashCode == 177945033) {
-                                // ignore: use_build_context_synchronously
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(const SnackBar(
-                                  content: Text("User not found"),
-                                ));
-                              } else if (error.hashCode == 261406832) {
-                                // ignore: use_build_context_synchronously
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(const SnackBar(
-                                  content: Text("Wrong Password"),
-                                ));
-                              }
-                            }
-                          } else {
-                            // ignore: use_build_context_synchronously
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content: Text("Email not registered"),
-                            ));
-                          }
-                        } else {
-                          // ignore: use_build_context_synchronously
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                            content: Text("Invalid Email address"),
-                          ));
-                        }
-                      } else {
-                        // ignore: use_build_context_synchronously
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text("Missing Fields"),
-                        ));
-                      }
+                      AccountHandler handler = AccountHandler();
+                      // ignore: use_build_context_synchronously
+                      handler.loginHandler(context, userEmail, userPassword);
                     } else {
                       // ignore: use_build_context_synchronously
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -294,10 +252,7 @@ class SignInPage extends StatelessWidget {
                             var signInMethod = await FirebaseAuth.instance
                                 .fetchSignInMethodsForEmail(userEmail);
                             if (signInMethod.isNotEmpty) {
-                              // await FirebaseAuth.instance.signInWithEmailLink(
-                              //     email: userEmail, emailLink: );
-
-                              Get.to(() => const EmailLinkPage());
+                              // Get.to(() => const EmailLinkPage());
                             } else {
                               // ignore: use_build_context_synchronously
                               ScaffoldMessenger.of(context)

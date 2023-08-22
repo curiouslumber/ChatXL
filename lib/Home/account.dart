@@ -388,6 +388,7 @@ class FullScreenAvatarPageState extends State<FullScreenAvatarPage> {
                                 FirebaseService service = FirebaseService();
                                 try {
                                   await service.signOutFromGoogle();
+                                  c.displayName.value = "";
                                   Get.offAll(() => const HomePage());
                                 } catch (e) {
                                   if (e is FirebaseAuthException) {}

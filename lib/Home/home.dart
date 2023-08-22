@@ -1,6 +1,9 @@
+import 'package:chatdb/Chat/controller.dart';
 import 'package:chatdb/Home/account.dart';
+import 'package:chatdb/Home/accounthandler.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../Database/databasehelper.dart';
 
 class HomeFragment extends StatefulWidget {
@@ -13,6 +16,8 @@ class HomeFragment extends StatefulWidget {
 class HomeFragmentState extends State<HomeFragment> {
   User? user = FirebaseAuth.instance.currentUser;
   final dbHelper = DatabaseHelper();
+  AccountHandler handler = AccountHandler();
+  Controller c = Get.put(Controller());
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +27,18 @@ class HomeFragmentState extends State<HomeFragment> {
     double availableWidth = mediaQueryData.size.width;
     // ignore: unused_local_variable
     double availableHeight = mediaQueryData.size.height;
+
+    var googleName = "";
+
+    if (user != null) {
+      var email = user?.email;
+      var tempName = user?.displayName;
+      googleName = tempName.toString();
+      var userEmail = email.toString();
+      if (googleName == 'null') {
+        handler.accountHandler(userEmail);
+      }
+    }
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -35,14 +52,16 @@ class HomeFragmentState extends State<HomeFragment> {
             margin: const EdgeInsets.only(top: 16.0),
             child: Row(
               children: [
-                const Expanded(
+                Expanded(
                     flex: 4,
-                    child: Text(
-                      'Good Morning\nUser,',
-                      style: TextStyle(
-                          fontSize: 22,
-                          fontFamily: 'Ubuntu',
-                          color: Color(0xffFFCFA3)),
+                    child: Obx(
+                      () => Text(
+                        'Good Morning\n${(c.displayName.value == "" && (googleName == "" || googleName == "null")) ? 'User' : (googleName == "null" ? c.displayName.value : googleName)},',
+                        style: const TextStyle(
+                            fontSize: 22,
+                            fontFamily: 'Ubuntu',
+                            color: Color(0xffFFCFA3)),
+                      ),
                     )),
                 Expanded(
                     flex: 2,
