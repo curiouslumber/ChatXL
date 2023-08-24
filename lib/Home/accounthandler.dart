@@ -73,33 +73,39 @@ class AccountHandler {
       if (userEmail.isEmail) {
         var signInMethod =
             await FirebaseAuth.instance.fetchSignInMethodsForEmail(userEmail);
+
         if (signInMethod.isNotEmpty) {
           try {
             await FirebaseAuth.instance.signInWithEmailAndPassword(
                 email: userEmail, password: userPassword);
-
             // ignore: use_build_context_synchronously
             ScaffoldMessenger.of(context)
                 .showSnackBar(const SnackBar(content: Text("Logged In")));
 
             Get.offAll(() => const HomePage());
-          } catch (error) {
-            if (error.hashCode == 177945033) {
-              // ignore: use_build_context_synchronously
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text("User not found"),
-              ));
-            } else if (error.hashCode == 261406832) {
-              // ignore: use_build_context_synchronously
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text("Wrong Password"),
-              ));
+          } catch (e) {
+            // ignore: avoid_print
+            print(e.toString());
+
+            var error = e.toString();
+            if (error.contains("firebase_auth/wrong-password")) {
+              if (signInMethod.contains("google.com")) {
+                // ignore: use_build_context_synchronously
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text("Invalid Password. Google Account"),
+                ));
+              } else {
+                // ignore: use_build_context_synchronously
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text("Invalid Password."),
+                ));
+              }
             }
           }
         } else {
           // ignore: use_build_context_synchronously
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text("Email not registered"),
+            content: Text("User doesn't exist. Please register."),
           ));
         }
       } else {

@@ -1,7 +1,6 @@
 import 'package:chatdb/Chat/controller.dart';
 import 'package:chatdb/Elements/checkinternet.dart';
 import 'package:chatdb/Home/accounthandler.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -223,74 +222,6 @@ class SignInPage extends StatelessWidget {
                     ),
                   ),
                 ),
-              ),
-              Container(
-                height: availableHeight / 40,
-              ),
-              Container(
-                height: availableHeight / 12,
-                alignment: Alignment.center,
-                // color: Colors.white,
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: const Color(0xff405C5A),
-                      elevation: 0,
-                      padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                      backgroundColor: const Color(0xffD9D9D9),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                    ),
-                    onPressed: () async {
-                      var userEmail = emailController.text.trim();
-
-                      await p.checkUserConnection();
-
-                      if (p.activeConnection.value) {
-                        if (userEmail != "") {
-                          if (userEmail.isEmail) {
-                            var signInMethod = await FirebaseAuth.instance
-                                .fetchSignInMethodsForEmail(userEmail);
-                            if (signInMethod.isNotEmpty) {
-                              // Get.to(() => const EmailLinkPage());
-                            } else {
-                              // ignore: use_build_context_synchronously
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                content: Text("Email not registered"),
-                              ));
-                            }
-                          } else {
-                            // ignore: use_build_context_synchronously
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content: Text("Invalid Email"),
-                            ));
-                          }
-                        } else {
-                          // ignore: use_build_context_synchronously
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                            content: Text("Email Field missing"),
-                          ));
-                        }
-                      } else {
-                        // ignore: use_build_context_synchronously
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text("No connection"),
-                        ));
-                      }
-                    },
-                    child: const Text(
-                      'Sign In Via Email Link',
-                      maxLines: 1,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontFamily: 'Ubuntu',
-                        color: Color(0xff034B40),
-                      ),
-                    )),
               ),
               Container(
                 height: availableHeight / 40,

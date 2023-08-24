@@ -19,6 +19,20 @@ class HomeFragmentState extends State<HomeFragment> {
   AccountHandler handler = AccountHandler();
   Controller c = Get.put(Controller());
 
+  var greetings = ["Good Morning", "Good Afternoon", "Good Evening"];
+  var currentGreetingIndex = 0;
+
+  void selectGreeting() {
+    var currentTime = DateTime.now().hour;
+    if (12 <= currentTime || currentTime < 16) {
+      currentGreetingIndex = 1;
+    } else if (0 <= currentTime || currentTime < 12) {
+      currentGreetingIndex = 0;
+    } else if (16 <= currentTime || currentTime < 0) {
+      currentGreetingIndex = 2;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // Responsive data
@@ -40,6 +54,8 @@ class HomeFragmentState extends State<HomeFragment> {
       }
     }
 
+    selectGreeting();
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,11 +72,12 @@ class HomeFragmentState extends State<HomeFragment> {
                     flex: 4,
                     child: Obx(
                       () => Text(
-                        'Good Morning\n${(c.displayName.value == "" && (googleName == "" || googleName == "null")) ? 'User' : (googleName == "null" ? c.displayName.value : googleName)},',
+                        '${greetings[currentGreetingIndex]}\n${(c.displayName.value == "" && (googleName == "" || googleName == "null")) ? 'User' : (googleName == "null" ? c.displayName.value : googleName)},',
                         style: const TextStyle(
-                            fontSize: 22,
+                            fontSize: 20,
                             fontFamily: 'Ubuntu',
                             color: Color(0xffFFCFA3)),
+                        maxLines: 2,
                       ),
                     )),
                 Expanded(
