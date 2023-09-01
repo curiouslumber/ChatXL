@@ -137,11 +137,12 @@ class AccountHandler {
             documentSnapshot.data() as Map<String, dynamic>;
         String field1Value = data['userName'];
         c.displayName.value = field1Value;
-        print('Field 1 value: $field1Value');
       } else {
+        // ignore: avoid_print
         print('Document does not exist');
       }
     } catch (e) {
+      // ignore: avoid_print
       print('Error retrieving data: $e');
     }
   }
