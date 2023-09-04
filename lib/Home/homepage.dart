@@ -37,6 +37,7 @@ class HomePageState extends State<HomePage> {
       drawer: const Sidebar(),
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Color(0xffFFCFA3)),
+        elevation: 0,
         centerTitle: true,
         title: const Text(
           'ChatXL',

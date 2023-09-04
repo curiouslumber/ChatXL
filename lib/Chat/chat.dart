@@ -33,7 +33,6 @@ class ChatFragmentState extends State<ChatFragment> {
 
     p.checkUserConnection();
 
-
     return Container(
       margin: const EdgeInsets.only(right: 16.0, left: 16.0, bottom: 8.0),
       decoration: const BoxDecoration(
@@ -258,19 +257,15 @@ class ChatFragmentState extends State<ChatFragment> {
                                   }
                                   String message = textEditingController.text;
                                   if (message.isNotEmpty) {
-
-
-
-                                    String jsonStr = await api.postData(message);
+                                    String jsonStr =
+                                        await api.postData(message);
                                     String res = api.processData(jsonStr);
 
-                                    if(res == "")
-                                    {
+                                    if (res == "") {
                                       res = "Cannot process request";
                                     }
 
                                     c.aiMessagesFromAPI.add(res);
-
 
                                     c.userMessagesObx.add(message);
                                     if (c.messageCount.value == 1) {
@@ -391,11 +386,12 @@ void _showPopup(BuildContext context, var availableWidth, var availableHeight,
                                             } else {
                                               int num = val;
 
-                                              c.tempSelectedFilePath.value = contacts[num]
-                                              ['excelFilePath'];
+                                              c.tempSelectedFilePath.value =
+                                                  contacts[num]
+                                                      ['excelFilePath'];
                                               c.tempSelectedFileName.value =
-                                              contacts[num]
-                                              ['excelSheetName'];
+                                                  contacts[num]
+                                                      ['excelSheetName'];
 
                                               sheetSelected.value = val;
                                             }
@@ -429,7 +425,7 @@ void _showPopup(BuildContext context, var availableWidth, var availableHeight,
                           ),
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                                shadowColor: Colors.black,
+                                backgroundColor: const Color(0xff405C5A),
                                 foregroundColor: Colors.white,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8.0))),
@@ -443,9 +439,8 @@ void _showPopup(BuildContext context, var availableWidth, var availableHeight,
                             },
                             child: const Text(
                               'Close',
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  color: Color.fromARGB(255, 3, 59, 51)),
+                              style:
+                                  TextStyle(fontSize: 14, color: Colors.white),
                             ),
                           ),
                         ),
@@ -478,10 +473,10 @@ void _showPopup(BuildContext context, var availableWidth, var availableHeight,
 
                                 Navigator.of(context).pop();
                               } else {
-
-
-                                c.selectedFilePath.value = c.tempSelectedFilePath.value;
-                                c.selectedFileName.value = c.tempSelectedFileName.value;
+                                c.selectedFilePath.value =
+                                    c.tempSelectedFilePath.value;
+                                c.selectedFileName.value =
+                                    c.tempSelectedFileName.value;
 
                                 c.messageCount.value = 1;
                                 c.userMessagesObx.clear();
