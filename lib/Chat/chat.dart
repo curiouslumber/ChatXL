@@ -257,9 +257,10 @@ class ChatFragmentState extends State<ChatFragment> {
                                   }
                                   String message = textEditingController.text;
                                   if (message.isNotEmpty) {
-                                    String jsonStr =
-                                        await api.postData(message);
-                                    String res = api.processData(jsonStr);
+                                    String res = "";
+                                    // String jsonStr =
+                                    //     await api.postData(message);
+                                    // String res = api.processData(jsonStr);
 
                                     if (res == "") {
                                       res = "Cannot process request";
