@@ -258,9 +258,9 @@ class ChatFragmentState extends State<ChatFragment> {
                                   String message = textEditingController.text;
                                   if (message.isNotEmpty) {
                                     String res = "";
-                                    // String jsonStr =
-                                    //     await api.postData(message);
-                                    // String res = api.processData(jsonStr);
+                                    String jsonStr =
+                                        await api.postData(message);
+                                    res = api.processData(jsonStr);
 
                                     if (res == "") {
                                       res = "Cannot process request";
@@ -458,7 +458,7 @@ void _showPopup(BuildContext context, var availableWidth, var availableHeight,
                           ),
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                                shadowColor: Colors.black,
+                                backgroundColor: const Color(0xff405C5A),
                                 foregroundColor: Colors.white,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8.0))),
@@ -500,8 +500,7 @@ void _showPopup(BuildContext context, var availableWidth, var availableHeight,
                             },
                             child: const Text('Submit',
                                 style: TextStyle(
-                                    fontSize: 14,
-                                    color: Color.fromARGB(255, 3, 59, 51))),
+                                    fontSize: 14, color: Colors.white)),
                           ),
                         ),
                       ),
