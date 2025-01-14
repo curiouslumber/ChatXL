@@ -46,3 +46,6 @@ app.*.map.json
 /android/app/google-services.json
 /lib/firebase_options.dart
 /lib/Chat/chat_api.dart
+
+firebase.json
+.vscode/
