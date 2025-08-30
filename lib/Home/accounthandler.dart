@@ -9,7 +9,8 @@ class AccountHandler {
   void registerHandler(BuildContext context, FirebaseAuth firebase,
       String userName, String userEmail, String userPassword) async {
     if (userEmail.isEmail) {
-      var signInMethod = await firebase.fetchSignInMethodsForEmail(userEmail);
+      // var signInMethod = await firebase.fetchSignInMethodsForEmail(userEmail);
+      var signInMethod = [];
 
       if (signInMethod.isNotEmpty) {
         // ignore: use_build_context_synchronously
@@ -71,8 +72,9 @@ class AccountHandler {
       BuildContext context, String userEmail, String userPassword) async {
     if (userEmail != "" && userPassword != "") {
       if (userEmail.isEmail) {
-        var signInMethod =
-            await FirebaseAuth.instance.fetchSignInMethodsForEmail(userEmail);
+        // var signInMethod =
+        //     await FirebaseAuth.instance.fetchSignInMethodsForEmail(userEmail);
+        var signInMethod = [];
 
         if (signInMethod.isNotEmpty) {
           try {
